@@ -16,7 +16,7 @@ class InventoryDialog extends StatelessWidget {
 
   final List<InventoryItemModel> inventory;
   final int activeStreakShields;
-  final void Function(String shopItemId) onUseItem;
+  final void Function(String tavernItemId) onUseItem;
 
   @override
   Widget build(BuildContext context) {

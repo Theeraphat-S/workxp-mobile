@@ -5,14 +5,24 @@ import 'package:workxp/core/theme/pixel_typography.dart';
 import 'package:workxp/core/widgets/pixel_card.dart';
 import 'package:workxp/domain/models/analytics_model.dart';
 
-class ExpLineChartCard extends StatelessWidget {
+class ExpLineChartCard extends StatefulWidget {
   const ExpLineChartCard({super.key, required this.logs});
 
   final List<DailyActivityLog> logs;
 
   @override
+  State<ExpLineChartCard> createState() => _ExpLineChartCardState();
+}
+
+class _ExpLineChartCardState extends State<ExpLineChartCard> {
+  bool _is30Days = false;
+
+  @override
   Widget build(BuildContext context) {
-    final recentLogs = logs.length > 7 ? logs.sublist(logs.length - 7) : logs;
+    final range = _is30Days ? 30 : 7;
+    final recentLogs = widget.logs.length > range
+        ? widget.logs.sublist(widget.logs.length - range)
+        : widget.logs;
     final spots = <FlSpot>[];
 
     for (int i = 0; i < recentLogs.length; i++) {
@@ -37,20 +47,56 @@ class ExpLineChartCard extends StatelessWidget {
               Text(
                 'EXP GROWTH TRAJECTORY',
                 style: PixelTypography.pixelHeader(
-                  fontSize: 11,
+                  fontSize: 10,
                   color: PixelColors.expPink,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                color: PixelColors.expBackground,
-                child: Text(
-                  'LAST 7 DAYS',
-                  style: PixelTypography.pixelSubheader(
-                    fontSize: 8,
-                    color: PixelColors.expPink,
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () => setState(() => _is30Days = false),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 3,
+                      ),
+                      color: !_is30Days
+                          ? PixelColors.expPink
+                          : PixelColors.backgroundSurface,
+                      child: Text(
+                        '7D',
+                        style: PixelTypography.pixelSubheader(
+                          fontSize: 8,
+                          color: !_is30Days
+                              ? Colors.black
+                              : PixelColors.textMuted,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 4),
+                  InkWell(
+                    onTap: () => setState(() => _is30Days = true),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 3,
+                      ),
+                      color: _is30Days
+                          ? PixelColors.expPink
+                          : PixelColors.backgroundSurface,
+                      child: Text(
+                        '30D',
+                        style: PixelTypography.pixelSubheader(
+                          fontSize: 8,
+                          color: _is30Days
+                              ? Colors.black
+                              : PixelColors.textMuted,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

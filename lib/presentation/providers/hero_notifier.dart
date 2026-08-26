@@ -65,10 +65,7 @@ class HeroNotifier extends StateNotifier<HeroModel> {
       SensoryService.instance.playHurt();
     }
 
-    state = state.copyWith(
-      currentHp: newHp,
-      isGhost: isGhost,
-    );
+    state = state.copyWith(currentHp: newHp, isGhost: isGhost);
   }
 
   /// Restores Hero HP

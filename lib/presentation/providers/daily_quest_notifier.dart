@@ -3,6 +3,8 @@ import 'package:workxp/domain/models/daily_quest_model.dart';
 import 'package:workxp/core/services/sensory_service.dart';
 import 'hero_notifier.dart';
 
+import 'analytics_notifier.dart';
+
 class DailyQuestNotifier extends StateNotifier<List<DailyQuestModel>> {
   DailyQuestNotifier([List<DailyQuestModel>? initial]) : super(initial ?? []);
 
@@ -26,7 +28,11 @@ class DailyQuestNotifier extends StateNotifier<List<DailyQuestModel>> {
   }
 
   /// Toggles daily quest completion status
-  void toggleDailyQuest(String id, {required HeroNotifier heroNotifier}) {
+  void toggleDailyQuest(
+    String id, {
+    required HeroNotifier heroNotifier,
+    AnalyticsNotifier? analyticsNotifier,
+  }) {
     final index = state.indexWhere((d) => d.id == id);
     if (index == -1) return;
 
@@ -54,6 +60,7 @@ class DailyQuestNotifier extends StateNotifier<List<DailyQuestModel>> {
       SensoryService.instance.playCoin();
       heroNotifier.gainExp(30);
       heroNotifier.gainCoins(15);
+      analyticsNotifier?.recordExp(30);
 
       // Check if all dailies completed today for bonus streak rewards
       final allDone =

@@ -86,7 +86,7 @@ class DungeonNotifier extends StateNotifier<DungeonState> {
       0,
       state.activeBoss.maxHp,
     );
-    final isDead = newHp == 0;
+    final isDefeated = newHp == 0;
 
     if (damage >= 200) {
       SensoryService.instance.playCriticalAttack();
@@ -94,7 +94,7 @@ class DungeonNotifier extends StateNotifier<DungeonState> {
       SensoryService.instance.playAttack();
     }
 
-    if (isDead) {
+    if (isDefeated) {
       SensoryService.instance.playVictory();
       final defeated = state.activeBoss.copyWith(
         currentHp: 0,

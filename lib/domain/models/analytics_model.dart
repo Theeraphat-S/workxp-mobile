@@ -146,7 +146,7 @@ class LeaderboardEntryModel {
     required this.skinId,
     required this.weeklyDamage,
     required this.streak,
-    this.isPlayer = false,
+    this.isHero = false,
   });
 
   final int rank;
@@ -155,7 +155,8 @@ class LeaderboardEntryModel {
   final String skinId;
   final int weeklyDamage;
   final int streak;
-  final bool isPlayer;
+  final bool isHero;
+  bool get isPlayer => isHero;
 
   Map<String, dynamic> toJson() {
     return {
@@ -165,7 +166,8 @@ class LeaderboardEntryModel {
       'skinId': skinId,
       'weeklyDamage': weeklyDamage,
       'streak': streak,
-      'isPlayer': isPlayer,
+      'isHero': isHero,
+      'isPlayer': isHero,
     };
   }
 
@@ -177,7 +179,7 @@ class LeaderboardEntryModel {
       skinId: json['skinId'] as String? ?? 'hero_novice',
       weeklyDamage: (json['weeklyDamage'] as num?)?.toInt() ?? 0,
       streak: (json['streak'] as num?)?.toInt() ?? 0,
-      isPlayer: json['isPlayer'] as bool? ?? false,
+      isHero: (json['isHero'] as bool?) ?? (json['isPlayer'] as bool?) ?? false,
     );
   }
 

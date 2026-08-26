@@ -37,8 +37,10 @@ class DayCycleService {
     required List<DailyQuestModel> dailies,
     required HeroNotifier heroNotifier,
     bool isStreakShieldActive = false,
+    bool isBossStunActive = false,
   }) {
-    if (lastActiveDate == null || !isDifferentDay(lastActiveDate, currentDate)) {
+    if (lastActiveDate == null ||
+        !isDifferentDay(lastActiveDate, currentDate)) {
       return const DayCycleResult(
         dayChanged: false,
         incompleteDailiesCount: 0,
@@ -51,7 +53,7 @@ class DayCycleService {
     final incompleteCount = dailies.where((d) => !d.isCompletedToday).length;
 
     int damage = 0;
-    if (incompleteCount > 0 && !isStreakShieldActive) {
+    if (incompleteCount > 0 && !isStreakShieldActive && !isBossStunActive) {
       damage = incompleteCount * damagePerIncompleteDaily;
       heroNotifier.takeDamage(damage);
     }

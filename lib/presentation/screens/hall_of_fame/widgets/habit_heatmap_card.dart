@@ -37,45 +37,65 @@ class HabitHeatmapCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // 7 rows x 4 columns grid
+          // 7 columns x 4 rows matrix (28 days of history)
           Center(
             child: SizedBox(
               height: 110,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(7, (colIndex) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(4, (rowIndex) {
-                      final dayOffset = (colIndex * 4) + rowIndex;
-                      final count = (dayOffset * 7) % 5; // simulated frequency
+              child: Builder(
+                builder: (context) {
+                  final now = DateTime.now();
+                  final today = DateTime(now.year, now.month, now.day);
 
-                      Color cellColor;
-                      if (count >= 4) {
-                        cellColor = PixelColors.coinGold;
-                      } else if (count >= 3) {
-                        cellColor = PixelColors.hpGreen;
-                      } else if (count >= 1) {
-                        cellColor = PixelColors.hpGreen.withAlpha(120);
-                      } else {
-                        cellColor = PixelColors.backgroundSurface;
-                      }
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(7, (colIndex) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(4, (rowIndex) {
+                          // Map grid to chronological day offsets (0 = oldest, 27 = today)
+                          final dayOffset = (colIndex * 4) + rowIndex;
+                          final targetDate = today.subtract(
+                            Duration(days: 27 - dayOffset),
+                          );
 
-                      return Container(
-                        width: 18,
-                        height: 18,
-                        margin: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: cellColor,
-                          border: Border.all(
-                            color: PixelColors.borderDark,
-                            width: 1.0,
-                          ),
-                        ),
+                          final logMatch = logs.where(
+                            (l) =>
+                                l.date.year == targetDate.year &&
+                                l.date.month == targetDate.month &&
+                                l.date.day == targetDate.day,
+                          );
+                          final count = logMatch.isNotEmpty
+                              ? logMatch.first.habitCompletions
+                              : 0;
+
+                          Color cellColor;
+                          if (count >= 4) {
+                            cellColor = PixelColors.coinGold;
+                          } else if (count >= 3) {
+                            cellColor = PixelColors.hpGreen;
+                          } else if (count >= 1) {
+                            cellColor = PixelColors.hpGreen.withAlpha(120);
+                          } else {
+                            cellColor = PixelColors.backgroundSurface;
+                          }
+
+                          return Container(
+                            width: 18,
+                            height: 18,
+                            margin: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: cellColor,
+                              border: Border.all(
+                                color: PixelColors.borderDark,
+                                width: 1.0,
+                              ),
+                            ),
+                          );
+                        }),
                       );
                     }),
                   );
-                }),
+                },
               ),
             ),
           ),

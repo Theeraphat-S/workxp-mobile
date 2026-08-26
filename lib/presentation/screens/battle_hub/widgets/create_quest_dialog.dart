@@ -114,7 +114,7 @@ class _CreateQuestDialogState extends State<CreateQuestDialog> {
                 decoration: const InputDecoration(
                   filled: true,
                   fillColor: PixelColors.backgroundSurface,
-                  hintText: 'Task details or notes',
+                  hintText: 'Quest details or notes',
                   hintStyle: TextStyle(color: PixelColors.textMuted),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: PixelColors.borderDark),

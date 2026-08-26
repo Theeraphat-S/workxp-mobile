@@ -110,6 +110,57 @@ class HiveStorageService {
     return null;
   }
 
+  /// Loads existing saved game state from Hive box
+  Map<String, dynamic>? loadSavedGameState() {
+    if (!hasSaveData()) return null;
+    try {
+      final heroJson =
+          jsonDecode(_box!.get('hero') as String) as Map<String, dynamic>;
+      final questsRaw =
+          jsonDecode(_box!.get('quests') as String) as List<dynamic>;
+      final dailiesRaw =
+          jsonDecode(_box!.get('dailies') as String) as List<dynamic>;
+      final habitsRaw =
+          jsonDecode(_box!.get('habits') as String) as List<dynamic>;
+      final dungeonJson =
+          jsonDecode(_box!.get('dungeon') as String) as Map<String, dynamic>;
+      final tavernJson =
+          jsonDecode(_box!.get('tavern') as String) as Map<String, dynamic>;
+      final analyticsJson =
+          jsonDecode(_box!.get('analytics') as String) as Map<String, dynamic>;
+
+      DateTime? lastSavedAt;
+      if (_box!.containsKey('settings')) {
+        final settingsJson =
+            jsonDecode(_box!.get('settings') as String) as Map<String, dynamic>;
+        if (settingsJson.containsKey('lastSavedAt')) {
+          lastSavedAt = DateTime.tryParse(
+            settingsJson['lastSavedAt'] as String,
+          );
+        }
+      }
+
+      return {
+        'hero': HeroModel.fromJson(heroJson),
+        'quests': questsRaw
+            .map((e) => QuestModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        'dailies': dailiesRaw
+            .map((e) => DailyQuestModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        'habits': habitsRaw
+            .map((e) => HabitModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        'dungeon': DungeonState.fromJson(dungeonJson),
+        'tavern': TavernState.fromJson(tavernJson),
+        'analytics': AnalyticsState.fromJson(analyticsJson),
+        'lastSavedAt': lastSavedAt,
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Loads starter kit data for fresh installs
   Map<String, dynamic> generateStarterKit() {
     final starterHero = const HeroModel(
@@ -201,7 +252,7 @@ class HiveStorageService {
     );
 
     final starterTavern = TavernState(
-      catalog: ShopItemModel.defaultCatalog(),
+      catalog: TavernItemModel.defaultCatalog(),
       customRewards: [
         CustomRewardModel(
           id: 'starter_boba',
@@ -212,7 +263,7 @@ class HiveStorageService {
         CustomRewardModel(
           id: 'starter_game',
           title: '1 Hour Video Game Session',
-          description: 'Guilt-free gaming time earned via completed tasks.',
+          description: 'Guilt-free gaming time earned via completed quests.',
           coinCost: 40,
         ),
       ],

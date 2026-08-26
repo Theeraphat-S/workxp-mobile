@@ -17,7 +17,7 @@ class RevivalQuestDialog extends StatefulWidget {
 class _RevivalQuestDialogState extends State<RevivalQuestDialog> {
   int _selectedActionIndex = 0;
 
-  static const List<Map<String, String>> _revivalTasks = [
+  static const List<Map<String, String>> _revivalQuests = [
     {
       'title': 'Hydrate the Soul',
       'desc': 'Drink 1 full glass of clean water right now.',
@@ -74,8 +74,8 @@ class _RevivalQuestDialogState extends State<RevivalQuestDialog> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 14),
-            ...List.generate(_revivalTasks.length, (index) {
-              final task = _revivalTasks[index];
+            ...List.generate(_revivalQuests.length, (index) {
+              final quest = _revivalQuests[index];
               final isSelected = _selectedActionIndex == index;
 
               return Padding(
@@ -112,7 +112,7 @@ class _RevivalQuestDialogState extends State<RevivalQuestDialog> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                task['title']!,
+                                quest['title']!,
                                 style: PixelTypography.pixelSubheader(
                                   fontSize: 10,
                                   color: isSelected
@@ -121,7 +121,7 @@ class _RevivalQuestDialogState extends State<RevivalQuestDialog> {
                                 ),
                               ),
                               Text(
-                                task['desc']!,
+                                quest['desc']!,
                                 style: PixelTypography.standardBody(
                                   fontSize: 10,
                                   color: PixelColors.textMuted,

@@ -11,13 +11,13 @@ class TavernState {
     this.activeStreakShields = 0,
   });
 
-  final List<ShopItemModel> catalog;
+  final List<TavernItemModel> catalog;
   final List<InventoryItemModel> inventory;
   final List<CustomRewardModel> customRewards;
   final int activeStreakShields;
 
   TavernState copyWith({
-    List<ShopItemModel>? catalog,
+    List<TavernItemModel>? catalog,
     List<InventoryItemModel>? inventory,
     List<CustomRewardModel>? customRewards,
     int? activeStreakShields,
@@ -43,9 +43,9 @@ class TavernState {
     return TavernState(
       catalog:
           (json['catalog'] as List<dynamic>?)
-              ?.map((e) => ShopItemModel.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => TavernItemModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          ShopItemModel.defaultCatalog(),
+          TavernItemModel.defaultCatalog(),
       inventory:
           (json['inventory'] as List<dynamic>?)
               ?.map(
@@ -70,7 +70,7 @@ class TavernNotifier extends StateNotifier<TavernState> {
     : super(
         initial ??
             TavernState(
-              catalog: ShopItemModel.defaultCatalog(),
+              catalog: TavernItemModel.defaultCatalog(),
               customRewards: [
                 CustomRewardModel(
                   id: 'rew_tea',
@@ -93,10 +93,10 @@ class TavernNotifier extends StateNotifier<TavernState> {
   }
 
   /// Purchase an item from the Tavern
-  bool buyItem(String shopItemId, {required HeroNotifier heroNotifier}) {
+  bool buyItem(String tavernItemId, {required HeroNotifier heroNotifier}) {
     final item = state.catalog.firstWhere(
-      (i) => i.id == shopItemId,
-      orElse: () => const ShopItemModel(
+      (i) => i.id == tavernItemId,
+      orElse: () => const TavernItemModel(
         id: '',
         name: '',
         description: '',
@@ -115,13 +115,13 @@ class TavernNotifier extends StateNotifier<TavernState> {
 
     if (item.type == 'consumable') {
       final inv = List<InventoryItemModel>.from(state.inventory);
-      final idx = inv.indexWhere((i) => i.shopItemId == item.id);
+      final idx = inv.indexWhere((i) => i.tavernItemId == item.id);
       if (idx != -1) {
         inv[idx] = inv[idx].copyWith(quantity: inv[idx].quantity + 1);
       } else {
         inv.add(
           InventoryItemModel(
-            shopItemId: item.id,
+            tavernItemId: item.id,
             name: item.name,
             description: item.description,
             spriteType: item.spriteType,
@@ -140,15 +140,18 @@ class TavernNotifier extends StateNotifier<TavernState> {
   }
 
   /// Consumes an item from inventory
-  bool useConsumable(String shopItemId, {required HeroNotifier heroNotifier}) {
+  bool useConsumable(
+    String tavernItemId, {
+    required HeroNotifier heroNotifier,
+  }) {
     final inv = List<InventoryItemModel>.from(state.inventory);
-    final idx = inv.indexWhere((i) => i.shopItemId == shopItemId);
+    final idx = inv.indexWhere((i) => i.tavernItemId == tavernItemId);
     if (idx == -1 || inv[idx].quantity <= 0) return false;
 
     final item = inv[idx];
 
     // Apply specific effect
-    switch (shopItemId) {
+    switch (tavernItemId) {
       case 'item_potion_health':
         heroNotifier.healHp(item.effectValue > 0 ? item.effectValue : 50);
         SensoryService.instance.playLevelUp();

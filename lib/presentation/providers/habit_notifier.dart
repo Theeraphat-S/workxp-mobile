@@ -3,6 +3,8 @@ import 'package:workxp/domain/models/habit_model.dart';
 import 'package:workxp/core/services/sensory_service.dart';
 import 'hero_notifier.dart';
 
+import 'analytics_notifier.dart';
+
 class HabitNotifier extends StateNotifier<List<HabitModel>> {
   HabitNotifier([List<HabitModel>? initial]) : super(initial ?? []);
 
@@ -26,7 +28,11 @@ class HabitNotifier extends StateNotifier<List<HabitModel>> {
   }
 
   /// Logs positive (+) habit occurrence: +10 Coins, +15 MP
-  void logPositive(String id, {required HeroNotifier heroNotifier}) {
+  void logPositive(
+    String id, {
+    required HeroNotifier heroNotifier,
+    AnalyticsNotifier? analyticsNotifier,
+  }) {
     final index = state.indexWhere((h) => h.id == id);
     if (index == -1) return;
 
@@ -43,10 +49,15 @@ class HabitNotifier extends StateNotifier<List<HabitModel>> {
     SensoryService.instance.playCoin();
     heroNotifier.gainCoins(10);
     heroNotifier.gainMp(15);
+    analyticsNotifier?.recordHabit();
   }
 
   /// Logs negative (-) habit occurrence: -10 Coins, -15 MP
-  void logNegative(String id, {required HeroNotifier heroNotifier}) {
+  void logNegative(
+    String id, {
+    required HeroNotifier heroNotifier,
+    AnalyticsNotifier? analyticsNotifier,
+  }) {
     final index = state.indexWhere((h) => h.id == id);
     if (index == -1) return;
 

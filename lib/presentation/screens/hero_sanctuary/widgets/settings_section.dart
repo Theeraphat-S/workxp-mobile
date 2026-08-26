@@ -124,16 +124,16 @@ class _SettingsSectionState extends State<SettingsSection> {
                       backgroundColor: PixelColors.backgroundSurface,
                       textColor: PixelColors.coinGold,
                       onPressed: () {
-                        final json =
-                            HiveStorageService.instance.exportSaveFileJson(
-                          hero: hero,
-                          quests: quests,
-                          dailies: dailies,
-                          habits: habits,
-                          dungeon: dungeon,
-                          tavern: tavern,
-                          analytics: analytics,
-                        );
+                        final json = HiveStorageService.instance
+                            .exportSaveFileJson(
+                              hero: hero,
+                              quests: quests,
+                              dailies: dailies,
+                              habits: habits,
+                              dungeon: dungeon,
+                              tavern: tavern,
+                              analytics: analytics,
+                            );
                         showDialog(
                           context: context,
                           builder: (ctx) => JsonBackupDialog(
@@ -162,52 +162,69 @@ class _SettingsSectionState extends State<SettingsSection> {
                                   .parseAndValidateSaveJson(jsonString);
                               if (map != null) {
                                 if (map.containsKey('hero')) {
-                                  heroNotifier.setHero(HeroModel.fromJson(
-                                      map['hero'] as Map<String, dynamic>));
+                                  heroNotifier.setHero(
+                                    HeroModel.fromJson(
+                                      map['hero'] as Map<String, dynamic>,
+                                    ),
+                                  );
                                 }
                                 if (map.containsKey('quests')) {
-                                  final qList =
-                                      (map['quests'] as List<dynamic>)
-                                          .map((e) => QuestModel.fromJson(
-                                              e as Map<String, dynamic>))
-                                          .toList();
+                                  final qList = (map['quests'] as List<dynamic>)
+                                      .map(
+                                        (e) => QuestModel.fromJson(
+                                          e as Map<String, dynamic>,
+                                        ),
+                                      )
+                                      .toList();
                                   questNotifier.setQuests(qList);
                                 }
                                 if (map.containsKey('dailies')) {
                                   final dList =
                                       (map['dailies'] as List<dynamic>)
-                                          .map((e) => DailyQuestModel.fromJson(
-                                              e as Map<String, dynamic>))
+                                          .map(
+                                            (e) => DailyQuestModel.fromJson(
+                                              e as Map<String, dynamic>,
+                                            ),
+                                          )
                                           .toList();
                                   dailyNotifier.setDailyQuests(dList);
                                 }
                                 if (map.containsKey('habits')) {
-                                  final hList =
-                                      (map['habits'] as List<dynamic>)
-                                          .map((e) => HabitModel.fromJson(
-                                              e as Map<String, dynamic>))
-                                          .toList();
+                                  final hList = (map['habits'] as List<dynamic>)
+                                      .map(
+                                        (e) => HabitModel.fromJson(
+                                          e as Map<String, dynamic>,
+                                        ),
+                                      )
+                                      .toList();
                                   habitNotifier.setHabits(hList);
                                 }
                                 if (map.containsKey('dungeon')) {
                                   dungeonNotifier.setDungeonState(
-                                      DungeonState.fromJson(map['dungeon']
-                                          as Map<String, dynamic>));
+                                    DungeonState.fromJson(
+                                      map['dungeon'] as Map<String, dynamic>,
+                                    ),
+                                  );
                                 }
                                 if (map.containsKey('tavern')) {
                                   tavernNotifier.setTavernState(
-                                      TavernState.fromJson(map['tavern']
-                                          as Map<String, dynamic>));
+                                    TavernState.fromJson(
+                                      map['tavern'] as Map<String, dynamic>,
+                                    ),
+                                  );
                                 }
                                 if (map.containsKey('analytics')) {
                                   analyticsNotifier.setAnalyticsState(
-                                      AnalyticsState.fromJson(map['analytics']
-                                          as Map<String, dynamic>));
+                                    AnalyticsState.fromJson(
+                                      map['analytics'] as Map<String, dynamic>,
+                                    ),
+                                  );
                                 }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
-                                        'Save file imported successfully!'),
+                                      'Save file imported successfully!',
+                                    ),
                                     backgroundColor: PixelColors.hpGreen,
                                   ),
                                 );

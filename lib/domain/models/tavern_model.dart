@@ -1,8 +1,8 @@
 import 'package:uuid/uuid.dart';
 
 /// Item in the Tavern shop catalog
-class ShopItemModel {
-  const ShopItemModel({
+class TavernItemModel {
+  const TavernItemModel({
     required this.id,
     required this.name,
     required this.description,
@@ -32,8 +32,8 @@ class ShopItemModel {
     };
   }
 
-  factory ShopItemModel.fromJson(Map<String, dynamic> json) {
-    return ShopItemModel(
+  factory TavernItemModel.fromJson(Map<String, dynamic> json) {
+    return TavernItemModel(
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
       description: json['description'] as String? ?? '',
@@ -44,10 +44,10 @@ class ShopItemModel {
     );
   }
 
-  static List<ShopItemModel> defaultCatalog() {
+  static List<TavernItemModel> defaultCatalog() {
     return const [
       // Consumables
-      ShopItemModel(
+      TavernItemModel(
         id: 'item_potion_health',
         name: 'Health Potion',
         description: 'Restores 50 HP immediately.',
@@ -56,7 +56,7 @@ class ShopItemModel {
         spriteType: 'potion_health',
         effectValue: 50,
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'item_streak_shield',
         name: 'Streak Shield',
         description: 'Shields your HP and streak from 1 missed day.',
@@ -65,7 +65,7 @@ class ShopItemModel {
         spriteType: 'shield',
         effectValue: 1,
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'item_exp_tonic',
         name: 'EXP Tonic',
         description: 'Grants an instant +100 EXP boost.',
@@ -74,7 +74,7 @@ class ShopItemModel {
         spriteType: 'potion_exp',
         effectValue: 100,
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'item_elixir_life',
         name: 'Elixir of Life',
         description: 'Instantly resurrects Hero from Ghost State with 100% HP.',
@@ -85,7 +85,7 @@ class ShopItemModel {
       ),
 
       // Cosmetics (Skins)
-      ShopItemModel(
+      TavernItemModel(
         id: 'paladin',
         name: 'Holy Paladin Skin',
         description: 'Radiant armor forged from golden sunlight.',
@@ -93,7 +93,7 @@ class ShopItemModel {
         type: 'skin',
         spriteType: 'paladin',
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'dark_knight',
         name: 'Dark Knight Skin',
         description: 'Shadow-infused plate armor with violet aura.',
@@ -101,7 +101,7 @@ class ShopItemModel {
         type: 'skin',
         spriteType: 'dark_knight',
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'archmage',
         name: 'Archmage Robes',
         description: 'Mystic vestments glowing with ancient wisdom.',
@@ -109,7 +109,7 @@ class ShopItemModel {
         type: 'skin',
         spriteType: 'archmage',
       ),
-      ShopItemModel(
+      TavernItemModel(
         id: 'cyber_samurai',
         name: 'Cyber Samurai Skin',
         description: 'Neon-infused futuristic cyber armor.',
@@ -117,14 +117,35 @@ class ShopItemModel {
         type: 'skin',
         spriteType: 'cyber_samurai',
       ),
+
+      // Themes (Cosmetics)
+      TavernItemModel(
+        id: 'theme_amber_crt',
+        name: 'Amber CRT Theme',
+        description: 'Retro monochrome amber terminal phosphorescent screen.',
+        cost: 100,
+        type: 'theme',
+        spriteType: 'theme_amber',
+      ),
+      TavernItemModel(
+        id: 'theme_green_crt',
+        name: 'Matrix Green CRT Theme',
+        description: 'Cyberpunk green phosphorescent terminal display.',
+        cost: 100,
+        type: 'theme',
+        spriteType: 'theme_green',
+      ),
     ];
   }
 }
 
+/// Backwards compatibility alias for TavernItemModel
+typedef ShopItemModel = TavernItemModel;
+
 /// Inventory item holding consumable quantity
 class InventoryItemModel {
   const InventoryItemModel({
-    required this.shopItemId,
+    required this.tavernItemId,
     required this.name,
     required this.description,
     required this.spriteType,
@@ -132,7 +153,9 @@ class InventoryItemModel {
     this.effectValue = 0,
   });
 
-  final String shopItemId;
+  final String tavernItemId;
+  String get shopItemId => tavernItemId;
+
   final String name;
   final String description;
   final String spriteType;
@@ -140,7 +163,7 @@ class InventoryItemModel {
   final int effectValue;
 
   InventoryItemModel copyWith({
-    String? shopItemId,
+    String? tavernItemId,
     String? name,
     String? description,
     String? spriteType,
@@ -148,7 +171,7 @@ class InventoryItemModel {
     int? effectValue,
   }) {
     return InventoryItemModel(
-      shopItemId: shopItemId ?? this.shopItemId,
+      tavernItemId: tavernItemId ?? this.tavernItemId,
       name: name ?? this.name,
       description: description ?? this.description,
       spriteType: spriteType ?? this.spriteType,
@@ -159,7 +182,8 @@ class InventoryItemModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'shopItemId': shopItemId,
+      'tavernItemId': tavernItemId,
+      'shopItemId': tavernItemId,
       'name': name,
       'description': description,
       'spriteType': spriteType,
@@ -169,8 +193,12 @@ class InventoryItemModel {
   }
 
   factory InventoryItemModel.fromJson(Map<String, dynamic> json) {
+    final itemId =
+        (json['tavernItemId'] as String?) ??
+        (json['shopItemId'] as String?) ??
+        '';
     return InventoryItemModel(
-      shopItemId: json['shopItemId'] as String? ?? '',
+      tavernItemId: itemId,
       name: json['name'] as String? ?? '',
       description: json['description'] as String? ?? '',
       spriteType: json['spriteType'] as String? ?? 'potion_health',

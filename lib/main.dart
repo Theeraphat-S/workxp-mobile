@@ -15,6 +15,9 @@ import 'package:workxp/presentation/providers/tavern_notifier.dart';
 import 'package:workxp/presentation/providers/analytics_notifier.dart';
 import 'package:workxp/presentation/screens/main_navigation_screen.dart';
 
+import 'package:workxp/core/services/day_cycle_service.dart';
+import 'package:workxp/presentation/providers/skill_buff_notifier.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -45,10 +48,54 @@ class _WorkXpAppState extends ConsumerState<WorkXpApp> {
   }
 
   void _loadInitialData() {
-    final starterKit = HiveStorageService.instance.generateStarterKit();
+    // 1. Try loading existing saved game state from Hive box
+    final savedData = HiveStorageService.instance.loadSavedGameState();
+    if (savedData != null) {
+      ref.read(heroProvider.notifier).setHero(savedData['hero'] as HeroModel);
+      ref
+          .read(questProvider.notifier)
+          .setQuests(savedData['quests'] as List<QuestModel>);
+      ref
+          .read(dailyQuestProvider.notifier)
+          .setDailyQuests(savedData['dailies'] as List<DailyQuestModel>);
+      ref
+          .read(habitProvider.notifier)
+          .setHabits(savedData['habits'] as List<HabitModel>);
+      ref
+          .read(dungeonProvider.notifier)
+          .setDungeonState(savedData['dungeon'] as DungeonState);
+      ref
+          .read(tavernProvider.notifier)
+          .setTavernState(savedData['tavern'] as TavernState);
+      ref
+          .read(analyticsProvider.notifier)
+          .setAnalyticsState(savedData['analytics'] as AnalyticsState);
 
-    // Check if initial empty state needs starter kit injection
+      // Evaluate DayCycleService reset if day transitioned
+      final lastSavedAt = savedData['lastSavedAt'] as DateTime?;
+      final tavernState = savedData['tavern'] as TavernState;
+      final isBossStun = ref
+          .read(skillBuffProvider.notifier)
+          .isBuffActive('buff_boss_stun');
+      final result = DayCycleService.instance.processDayReset(
+        lastActiveDate: lastSavedAt,
+        currentDate: DateTime.now(),
+        dailies: savedData['dailies'] as List<DailyQuestModel>,
+        heroNotifier: ref.read(heroProvider.notifier),
+        isStreakShieldActive: tavernState.activeStreakShields > 0,
+        isBossStunActive: isBossStun,
+      );
+
+      if (result.dayChanged) {
+        ref.read(dailyQuestProvider.notifier).resetDailiesForNewDay();
+        ref.read(habitProvider.notifier).resetHabitsForNewDay();
+      }
+      return;
+    }
+
+    // 2. Otherwise initialize starter kit for fresh installs
     if (ref.read(questProvider).isEmpty) {
+      final starterKit = HiveStorageService.instance.generateStarterKit();
       ref.read(heroProvider.notifier).setHero(starterKit['hero'] as HeroModel);
       ref
           .read(questProvider.notifier)

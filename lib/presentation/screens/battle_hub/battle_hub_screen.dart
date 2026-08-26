@@ -10,6 +10,7 @@ import 'package:workxp/presentation/providers/quest_notifier.dart';
 import 'package:workxp/presentation/providers/daily_quest_notifier.dart';
 import 'package:workxp/presentation/providers/habit_notifier.dart';
 import 'package:workxp/presentation/providers/skill_buff_notifier.dart';
+import 'package:workxp/presentation/providers/analytics_notifier.dart';
 import 'widgets/boss_encounter_card.dart';
 import 'widgets/floating_combat_overlay.dart';
 import 'widgets/quest_list_widget.dart';
@@ -51,6 +52,7 @@ class _BattleHubScreenState extends ConsumerState<BattleHubScreen> {
     final dailyNotifier = ref.read(dailyQuestProvider.notifier);
     final habitNotifier = ref.read(habitProvider.notifier);
     final buffNotifier = ref.read(skillBuffProvider.notifier);
+    final analyticsNotifier = ref.read(analyticsProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -219,6 +221,8 @@ class _BattleHubScreenState extends ConsumerState<BattleHubScreen> {
                           id,
                           heroNotifier: heroNotifier,
                           dungeonNotifier: dungeonNotifier,
+                          skillBuffNotifier: buffNotifier,
+                          analyticsNotifier: analyticsNotifier,
                         );
                         _triggerCombatSlash(dmg);
                       },
@@ -232,6 +236,7 @@ class _BattleHubScreenState extends ConsumerState<BattleHubScreen> {
                       onToggle: (id) => dailyNotifier.toggleDailyQuest(
                         id,
                         heroNotifier: heroNotifier,
+                        analyticsNotifier: analyticsNotifier,
                       ),
                       onAdd: (d) => dailyNotifier.addDailyQuest(d),
                       onEdit: (d) => dailyNotifier.editDailyQuest(d),
@@ -245,10 +250,12 @@ class _BattleHubScreenState extends ConsumerState<BattleHubScreen> {
                       onLogPositive: (id) => habitNotifier.logPositive(
                         id,
                         heroNotifier: heroNotifier,
+                        analyticsNotifier: analyticsNotifier,
                       ),
                       onLogNegative: (id) => habitNotifier.logNegative(
                         id,
                         heroNotifier: heroNotifier,
+                        analyticsNotifier: analyticsNotifier,
                       ),
                       onCastBuff: (buffId) => buffNotifier.castBuff(
                         buffId,

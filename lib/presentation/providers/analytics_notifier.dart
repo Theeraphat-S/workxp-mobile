@@ -194,7 +194,7 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
       skinId: hero.activeSkinId,
       weeklyDamage: totalDamage > 0 ? totalDamage : 850,
       streak: maxStreak > 0 ? maxStreak : 3,
-      isPlayer: true,
+      isHero: true,
     );
 
     final entries = List<LeaderboardEntryModel>.from(
@@ -212,7 +212,7 @@ class AnalyticsNotifier extends StateNotifier<AnalyticsState> {
         skinId: e.skinId,
         weeklyDamage: e.weeklyDamage,
         streak: e.streak,
-        isPlayer: e.isPlayer,
+        isHero: e.isHero,
       );
     });
 

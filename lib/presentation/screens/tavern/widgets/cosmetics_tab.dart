@@ -16,7 +16,7 @@ class CosmeticsTab extends StatelessWidget {
     required this.onEquip,
   });
 
-  final List<ShopItemModel> items;
+  final List<TavernItemModel> items;
   final HeroModel hero;
   final void Function(String id) onBuy;
   final void Function(String skinId) onEquip;

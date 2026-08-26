@@ -19,6 +19,8 @@ import 'package:workxp/data/storage/hive_storage_service.dart';
 void main() {
   group('Ticket 09: Local Persistence, JSON Backup & Starter Kit Slice', () {
     test('Starter Kit generates valid initial game state', () {
+      expect(HiveStorageService.instance.hasSaveData(), false);
+
       final starterKit = HiveStorageService.instance.generateStarterKit();
 
       final hero = starterKit['hero'] as HeroModel;
@@ -26,6 +28,7 @@ void main() {
       final dailies = starterKit['dailies'] as List<DailyQuestModel>;
       final habits = starterKit['habits'] as List<HabitModel>;
       final dungeon = starterKit['dungeon'] as DungeonState;
+      final tavern = starterKit['tavern'] as TavernState;
 
       expect(hero.name, 'Arthur');
       expect(hero.level, 1);
@@ -33,6 +36,8 @@ void main() {
       expect(dailies.length, 3);
       expect(habits.length, 3);
       expect(dungeon.activeBoss.name, 'King Slime');
+      expect(tavern.catalog.any((i) => i.id == 'theme_amber_crt'), true);
+      expect(tavern.catalog.any((i) => i.id == 'theme_green_crt'), true);
     });
 
     test('JSON Export and Import cycle preserves complete game state', () {
@@ -55,7 +60,12 @@ void main() {
       ];
 
       final dailies = [
-        DailyQuestModel(id: 'd1', title: 'Daily 1', streak: 4, isCompletedToday: true),
+        DailyQuestModel(
+          id: 'd1',
+          title: 'Daily 1',
+          streak: 4,
+          isCompletedToday: true,
+        ),
       ];
 
       final habits = [
@@ -68,9 +78,7 @@ void main() {
         unlockedChapters: [1, 2],
       );
 
-      const tavern = TavernState(
-        activeStreakShields: 2,
-      );
+      const tavern = TavernState(activeStreakShields: 2);
 
       final analytics = AnalyticsState();
 
@@ -88,10 +96,14 @@ void main() {
       expect(jsonString.isNotEmpty, true);
 
       // Validate & Parse
-      final parsed = HiveStorageService.instance.parseAndValidateSaveJson(jsonString);
+      final parsed = HiveStorageService.instance.parseAndValidateSaveJson(
+        jsonString,
+      );
       expect(parsed != null, true);
 
-      final importedHero = HeroModel.fromJson(parsed!['hero'] as Map<String, dynamic>);
+      final importedHero = HeroModel.fromJson(
+        parsed!['hero'] as Map<String, dynamic>,
+      );
       expect(importedHero.name, 'Galahad');
       expect(importedHero.level, 5);
       expect(importedHero.coins, 350);
@@ -104,55 +116,62 @@ void main() {
       expect(importedQuests.first.title, 'Task 1');
       expect(importedQuests.first.isCompleted, true);
 
-      final importedDungeon = DungeonState.fromJson(parsed['dungeon'] as Map<String, dynamic>);
+      final importedDungeon = DungeonState.fromJson(
+        parsed['dungeon'] as Map<String, dynamic>,
+      );
       expect(importedDungeon.currentChapter, 2);
       expect(importedDungeon.activeBoss.currentHp, 250);
     });
 
     test('Malformed JSON save string is safely rejected', () {
-      final invalid = HiveStorageService.instance.parseAndValidateSaveJson('{"invalid": true}');
+      final invalid = HiveStorageService.instance.parseAndValidateSaveJson(
+        '{"invalid": true}',
+      );
       expect(invalid, isNull);
 
-      final broken = HiveStorageService.instance.parseAndValidateSaveJson('not json string');
+      final broken = HiveStorageService.instance.parseAndValidateSaveJson(
+        'not json string',
+      );
       expect(broken, isNull);
     });
 
-    testWidgets('Hero Sanctuary UI displays settings, toggles and backup buttons', (tester) async {
-      tester.view.physicalSize = const Size(1080, 3200);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'Hero Sanctuary UI displays settings, toggles and backup buttons',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 3200);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      final heroNotifier = HeroNotifier(const HeroModel(name: 'Arthur'));
+        final heroNotifier = HeroNotifier(const HeroModel(name: 'Arthur'));
 
-      final container = ProviderContainer(
-        overrides: [
-          heroProvider.overrideWith((ref) => heroNotifier),
-          questProvider.overrideWith((ref) => QuestNotifier()),
-          dailyQuestProvider.overrideWith((ref) => DailyQuestNotifier()),
-          habitProvider.overrideWith((ref) => HabitNotifier()),
-          dungeonProvider.overrideWith((ref) => DungeonNotifier()),
-          tavernProvider.overrideWith((ref) => TavernNotifier()),
-          analyticsProvider.overrideWith((ref) => AnalyticsNotifier()),
-        ],
-      );
+        final container = ProviderContainer(
+          overrides: [
+            heroProvider.overrideWith((ref) => heroNotifier),
+            questProvider.overrideWith((ref) => QuestNotifier()),
+            dailyQuestProvider.overrideWith((ref) => DailyQuestNotifier()),
+            habitProvider.overrideWith((ref) => HabitNotifier()),
+            dungeonProvider.overrideWith((ref) => DungeonNotifier()),
+            tavernProvider.overrideWith((ref) => TavernNotifier()),
+            analyticsProvider.overrideWith((ref) => AnalyticsNotifier()),
+          ],
+        );
 
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            home: HeroSanctuaryScreen(),
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: const MaterialApp(home: HeroSanctuaryScreen()),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('SETTINGS & STORAGE BACKUP'), findsOneWidget);
-      expect(find.text('8-BIT SOUND EFFECTS (SFX)'), findsOneWidget);
-      expect(find.text('TACTILE HAPTIC FEEDBACK'), findsOneWidget);
-      expect(find.text('EXPORT JSON'), findsOneWidget);
-      expect(find.text('IMPORT JSON'), findsOneWidget);
-      expect(find.text('SAVE GAME PROGRESS NOW'), findsOneWidget);
-    });
+        expect(find.text('SETTINGS & STORAGE BACKUP'), findsOneWidget);
+        expect(find.text('8-BIT SOUND EFFECTS (SFX)'), findsOneWidget);
+        expect(find.text('TACTILE HAPTIC FEEDBACK'), findsOneWidget);
+        expect(find.text('EXPORT JSON'), findsOneWidget);
+        expect(find.text('IMPORT JSON'), findsOneWidget);
+        expect(find.text('SAVE GAME PROGRESS NOW'), findsOneWidget);
+      },
+    );
   });
 }

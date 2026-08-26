@@ -93,6 +93,47 @@ void main() {
         },
       );
 
+      test(
+        'DayCycleService respects Boss Stun and Streak Shield buffs preventing counter-damage',
+        () {
+          final heroNotifier = HeroNotifier(const HeroModel(currentHp: 100));
+
+          final daily1 = DailyQuestModel(
+            id: 'd1',
+            title: 'Task 1',
+            isCompletedToday: false,
+          );
+          final yesterday = DateTime(2026, 8, 25);
+          final today = DateTime(2026, 8, 26);
+
+          // With Boss Stun active
+          final resultStun = DayCycleService.instance.processDayReset(
+            lastActiveDate: yesterday,
+            currentDate: today,
+            dailies: [daily1],
+            heroNotifier: heroNotifier,
+            isBossStunActive: true,
+          );
+
+          expect(resultStun.dayChanged, true);
+          expect(resultStun.counterDamageDealt, 0);
+          expect(heroNotifier.state.currentHp, 100);
+
+          // With Streak Shield active
+          final resultShield = DayCycleService.instance.processDayReset(
+            lastActiveDate: yesterday,
+            currentDate: today,
+            dailies: [daily1],
+            heroNotifier: heroNotifier,
+            isStreakShieldActive: true,
+          );
+
+          expect(resultShield.dayChanged, true);
+          expect(resultShield.counterDamageDealt, 0);
+          expect(heroNotifier.state.currentHp, 100);
+        },
+      );
+
       testWidgets(
         'Battle Hub UI switches to Dailies tab and displays streak info',
         (tester) async {

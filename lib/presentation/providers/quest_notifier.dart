@@ -3,6 +3,9 @@ import 'package:workxp/domain/models/quest_model.dart';
 import 'hero_notifier.dart';
 import 'dungeon_notifier.dart';
 
+import 'skill_buff_notifier.dart';
+import 'analytics_notifier.dart';
+
 class QuestNotifier extends StateNotifier<List<QuestModel>> {
   QuestNotifier([List<QuestModel>? initial]) : super(initial ?? []);
 
@@ -26,11 +29,13 @@ class QuestNotifier extends StateNotifier<List<QuestModel>> {
   }
 
   /// Completes a Quest: strikes the boss with rank damage + hero attribute bonus,
-  /// grants EXP & Coins to hero, and marks quest as complete.
+  /// grants EXP & Coins to hero, records analytics, and marks quest as complete.
   int completeQuest(
     String questId, {
     required HeroNotifier heroNotifier,
     required DungeonNotifier dungeonNotifier,
+    SkillBuffNotifier? skillBuffNotifier,
+    AnalyticsNotifier? analyticsNotifier,
   }) {
     final index = state.indexWhere((q) => q.id == questId);
     if (index == -1) return 0;
@@ -40,9 +45,19 @@ class QuestNotifier extends StateNotifier<List<QuestModel>> {
 
     final baseDamage = QuestModel.baseDamageForRank(quest.rank);
     final heroBonus = heroNotifier.state.combatDamageBonus;
-    final totalDamage = baseDamage + heroBonus;
+    int totalDamage = baseDamage + heroBonus;
 
-    final expReward = QuestModel.expRewardForRank(quest.rank);
+    // Apply Focus Surge buff (+50% attack damage) if active
+    if (skillBuffNotifier?.isBuffActive('buff_focus_surge') == true) {
+      totalDamage = (totalDamage * 1.5).round();
+    }
+
+    int expReward = QuestModel.expRewardForRank(quest.rank);
+    // Apply Double EXP Scroll buff (2x EXP) if active
+    if (skillBuffNotifier?.isBuffActive('buff_double_exp') == true) {
+      expReward *= 2;
+    }
+
     final coinReward = QuestModel.coinRewardForRank(quest.rank);
 
     // Apply combat strike
@@ -52,10 +67,17 @@ class QuestNotifier extends StateNotifier<List<QuestModel>> {
     heroNotifier.gainExp(expReward);
     heroNotifier.gainCoins(coinReward);
 
+    // Record Live Analytics
+    analyticsNotifier?.recordExp(expReward);
+    analyticsNotifier?.recordDamage(totalDamage);
+
     // Check if boss died and grant boss bonus
     if (dungeonNotifier.state.activeBoss.isDefeated) {
-      heroNotifier.gainCoins(dungeonNotifier.state.activeBoss.coinReward);
-      heroNotifier.gainExp(dungeonNotifier.state.activeBoss.expReward);
+      final bossCoins = dungeonNotifier.state.activeBoss.coinReward;
+      final bossExp = dungeonNotifier.state.activeBoss.expReward;
+      heroNotifier.gainCoins(bossCoins);
+      heroNotifier.gainExp(bossExp);
+      analyticsNotifier?.recordExp(bossExp);
     }
 
     final updatedQuest = quest.copyWith(

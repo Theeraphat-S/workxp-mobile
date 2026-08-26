@@ -81,7 +81,7 @@ class WorldMapScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Conquer Dungeon Bosses with your daily tasks!',
+                        'Conquer Dungeon Bosses with your daily quests!',
                         style: PixelTypography.pixelBody(
                           fontSize: 12,
                           color: PixelColors.textMuted,

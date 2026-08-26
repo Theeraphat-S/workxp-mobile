@@ -15,7 +15,7 @@ class ConsumablesTab extends StatelessWidget {
     required this.onBuy,
   });
 
-  final List<ShopItemModel> items;
+  final List<TavernItemModel> items;
   final HeroModel hero;
   final void Function(String id) onBuy;
 

@@ -7,6 +7,8 @@ import 'package:workxp/domain/models/boss_model.dart';
 import 'package:workxp/presentation/providers/hero_notifier.dart';
 import 'package:workxp/presentation/providers/dungeon_notifier.dart';
 import 'package:workxp/presentation/providers/quest_notifier.dart';
+import 'package:workxp/presentation/providers/skill_buff_notifier.dart';
+import 'package:workxp/presentation/providers/analytics_notifier.dart';
 import 'package:workxp/presentation/screens/battle_hub/battle_hub_screen.dart';
 
 void main() {
@@ -102,6 +104,66 @@ void main() {
       // Hero gets quest reward (40 EXP + 20 Coins) + boss loot (150 EXP + 100 Coins)
       expect(heroNotifier.state.coins, 120);
     });
+
+    test(
+      'Skill buffs (Double EXP & Focus Surge) and Analytics record correctly on quest completion',
+      () {
+        final heroNotifier = HeroNotifier(
+          const HeroModel(
+            coins: 0,
+            currentExp: 0,
+            currentMp: 100,
+            str: 10,
+            agi: 5,
+          ),
+        );
+        final dungeonNotifier = DungeonNotifier(
+          DungeonState(
+            activeBoss: BossModel.chapterBoss(1).copyWith(currentHp: 500),
+          ),
+        );
+        final skillBuffNotifier = SkillBuffNotifier();
+        // Activate Double EXP and Focus Surge buffs
+        skillBuffNotifier.castBuff(
+          'buff_double_exp',
+          heroNotifier: heroNotifier,
+        );
+        skillBuffNotifier.castBuff(
+          'buff_focus_surge',
+          heroNotifier: heroNotifier,
+        );
+
+        final analyticsNotifier = AnalyticsNotifier(const AnalyticsState());
+
+        final quest = QuestModel(
+          id: 'q_buffed',
+          title: 'Epic Strike',
+          rank:
+              'C', // base dmg = 100, hero bonus = 25 -> raw 125 dmg. With Focus Surge (+50%): 188 dmg.
+          // base exp = 80 -> with Double EXP (2x): 160 exp.
+        );
+
+        final questNotifier = QuestNotifier([quest]);
+
+        final dmg = questNotifier.completeQuest(
+          'q_buffed',
+          heroNotifier: heroNotifier,
+          dungeonNotifier: dungeonNotifier,
+          skillBuffNotifier: skillBuffNotifier,
+          analyticsNotifier: analyticsNotifier,
+        );
+
+        expect(dmg, 188);
+        expect(
+          heroNotifier.state.level,
+          2,
+        ); // Leveled up from 1 to 2 at 100 EXP
+        expect(heroNotifier.state.currentExp, 60); // 160 - 100 = 60
+        expect(analyticsNotifier.state.dailyLogs.isNotEmpty, true);
+        expect(analyticsNotifier.state.dailyLogs.last.expEarned, 160);
+        expect(analyticsNotifier.state.dailyLogs.last.damageDealt, 188);
+      },
+    );
 
     testWidgets('Battle Hub UI renders quest list and displays boss card', (
       tester,

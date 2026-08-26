@@ -59,14 +59,14 @@ class LeaderboardCard extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 6),
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: entry.isPlayer
+                color: entry.isHero
                     ? PixelColors.coinAmber.withAlpha(30)
                     : PixelColors.backgroundSurface,
                 border: Border.all(
-                  color: entry.isPlayer
+                  color: entry.isHero
                       ? PixelColors.coinGold
                       : PixelColors.borderDark,
-                  width: entry.isPlayer ? 1.5 : 1.0,
+                  width: entry.isHero ? 1.5 : 1.0,
                 ),
               ),
               child: Row(
@@ -92,7 +92,7 @@ class LeaderboardCard extends StatelessWidget {
                           entry.name,
                           style: PixelTypography.pixelSubheader(
                             fontSize: 10,
-                            color: entry.isPlayer
+                            color: entry.isHero
                                 ? PixelColors.coinGold
                                 : PixelColors.textBright,
                           ),
