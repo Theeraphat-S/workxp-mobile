@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "title": "The Tavern",
+  "consumablesTab": "Consumables",
+  "skinsTab": "Avatar Skins",
+  "themesTab": "CRT Themes",
+  "customRewardsTab": "Real-Life Rewards",
+  "buyItem": "Buy for {cost} Coins",
+  "useItem": "Use Item",
+  "ownedQuantity": "Owned: {count}",
+  "redeemReward": "Redeem ({cost} Coins)",
+  "createCustomReward": "New Custom Reward",
+  "rewardTitleLabel": "Reward Name",
+  "rewardCostLabel": "Coin Cost",
+  "timesRedeemedCount": "Redeemed {times} times",
+  "insufficientCoins": "Not enough Coins!"
+}

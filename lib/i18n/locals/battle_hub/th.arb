@@ -1,0 +1,21 @@
+{
+  "@@locale": "th",
+  "title": "ศูนย์กลางการต่อสู้",
+  "bossFight": "การเผชิญหน้าบอส",
+  "strikeBoss": "โจมตีบอส",
+  "dealDamage": "สร้างความเสียหาย {damage} แต้ม!",
+  "heroHp": "พลังชีวิต: {current}/{max}",
+  "heroMp": "พลังมานา: {current}/{max}",
+  "questsTab": "เควสต์",
+  "dailyQuestsTab": "เควสต์รายวัน",
+  "habitsTab": "กิจวัตร",
+  "createQuest": "สร้างเควสต์",
+  "createDailyQuest": "สร้างเควสต์รายวัน",
+  "createHabit": "สร้างกิจวัตร",
+  "completeQuest": "ทำเควสต์สำเร็จ",
+  "ghostStateTitle": "สถานะวิญญาณ",
+  "ghostStateWarning": "ฮีโร่ของคุณพ่ายแพ้ในการรบ! รางวัลลดลง 50% จนกว่าจะฟื้นคืนชีพ",
+  "revivalQuest": "เควสต์ฟื้นคืนชีพ",
+  "reviveNow": "ชุบชีวิตฮีโร่",
+  "streakDays": "ทำต่อเนื่อง {days} วัน"
+}

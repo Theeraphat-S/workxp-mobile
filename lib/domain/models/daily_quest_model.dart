@@ -20,6 +20,8 @@ class DailyQuestModel {
   final DateTime? lastCompletedDate;
   final String attributeTag;
 
+  int get streakCount => streak;
+
   DailyQuestModel copyWith({
     String? id,
     String? title,

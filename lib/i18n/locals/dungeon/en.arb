@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "title": "World Map",
+  "chapterTitle": "Chapter {chapter}: {name}",
+  "bossDefeated": "Defeated",
+  "bossActive": "In Battle",
+  "bossLocked": "Locked",
+  "unlockRequirement": "Defeat previous boss to unlock",
+  "chapter1Name": "Slime Forest",
+  "chapter2Name": "Goblin Keep",
+  "chapter3Name": "Shadow Crypt",
+  "chapter4Name": "Volcano Peak"
+}

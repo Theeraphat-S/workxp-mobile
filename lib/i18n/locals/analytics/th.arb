@@ -1,0 +1,14 @@
+{
+  "@@locale": "th",
+  "title": "หอเกียรติยศ",
+  "expGrowthChart": "การเติบโตของค่า EXP",
+  "damageDealtChart": "สถิติการโจมตีบอส",
+  "habitHeatmap": "ตารางความสม่ำเสมอของกิจวัตร",
+  "attributeRadar": "เรดาร์สเตตัสฮีโร่",
+  "leaderboard": "อันดับนักผจญภัย",
+  "rankHeader": "อันดับ",
+  "heroHeader": "นักผจญภัย",
+  "levelHeader": "เลเวล",
+  "expHeader": "EXP รวม",
+  "emptyLogs": "ยังไม่มีบันทึกการรบ ทำเควสต์เพื่อดูสถิติวิเคราะห์!"
+}

@@ -22,6 +22,10 @@ class QuestModel {
   final bool isCompleted;
   final DateTime? completedAt;
 
+  int get baseDamage => baseDamageForRank(rank);
+  int get expReward => expRewardForRank(rank);
+  int get coinReward => coinRewardForRank(rank);
+
   static int baseDamageForRank(String r) {
     switch (r.toUpperCase()) {
       case 'S':

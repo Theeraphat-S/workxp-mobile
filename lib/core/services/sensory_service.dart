@@ -36,6 +36,9 @@ class SensoryService {
     }
   }
 
+  /// Alias for playAttack
+  void playSwordSlash() => playAttack();
+
   /// Critical strike or heavy boss damage
   void playCriticalAttack() {
     if (isHapticsEnabled) {

@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "appName": "WorkXP",
+  "appTagline": "16-Bit Gamified Productivity RPG",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "close": "Close",
+  "loading": "Loading...",
+  "error": "An error occurred",
+  "retry": "Retry",
+  "success": "Success",
+  "level": "Level {level}",
+  "coins": "{count} Coins",
+  "exp": "{current}/{max} EXP"
+}

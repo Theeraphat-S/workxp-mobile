@@ -1,0 +1,13 @@
+{
+  "@@locale": "th",
+  "title": "แผนที่โลก",
+  "chapterTitle": "บทที่ {chapter}: {name}",
+  "bossDefeated": "ปราบบอสแล้ว",
+  "bossActive": "กำลังต่อสู้",
+  "bossLocked": "ล็อกอยู่",
+  "unlockRequirement": "ปราบบอสก่อนหน้าเพื่อปลดล็อก",
+  "chapter1Name": "ป่าสไลม์",
+  "chapter2Name": "ป้อมก๊อบลิน",
+  "chapter3Name": "สุสานเงา",
+  "chapter4Name": "ยอดเขาเปลวเพลิง"
+}

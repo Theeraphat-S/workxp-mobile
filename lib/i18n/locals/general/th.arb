@@ -1,0 +1,17 @@
+{
+  "@@locale": "th",
+  "appName": "WorkXP",
+  "appTagline": "RPG เพิ่มพลังชีวิตสไตล์ 16-บิต",
+  "confirm": "ยืนยัน",
+  "cancel": "ยกเลิก",
+  "save": "บันทึก",
+  "delete": "ลบ",
+  "close": "ปิด",
+  "loading": "กำลังโหลด...",
+  "error": "เกิดข้อผิดพลาด",
+  "retry": "ลองใหม่",
+  "success": "สำเร็จ",
+  "level": "เลเวล {level}",
+  "coins": "{count} เหรียญ",
+  "exp": "{current}/{max} EXP"
+}

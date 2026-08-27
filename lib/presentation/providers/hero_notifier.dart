@@ -97,12 +97,26 @@ class HeroNotifier extends StateNotifier<HeroModel> {
     SensoryService.instance.playCoin();
   }
 
-  /// Deducts spendable Coins
+  /// Deducts spendable Coins (returns false if insufficient)
   bool spendCoins(int amount) {
     if (amount <= 0 || state.coins < amount) return false;
     state = state.copyWith(coins: state.coins - amount);
     SensoryService.instance.playCoin();
     return true;
+  }
+
+  /// Drains spendable Coins (clamps to 0 without underflow)
+  void drainCoins(int amount) {
+    if (amount <= 0) return;
+    state = state.copyWith(coins: (state.coins - amount).clamp(0, 999999999));
+  }
+
+  /// Drains Hero MP (clamps to 0 without underflow)
+  void drainMp(int amount) {
+    if (amount <= 0) return;
+    state = state.copyWith(
+      currentMp: (state.currentMp - amount).clamp(0, state.maxMp),
+    );
   }
 
   /// Allocates 1 attribute point to STR, INT, AGI, VIT, or WIS

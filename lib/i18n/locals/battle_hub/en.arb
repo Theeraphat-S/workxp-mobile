@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "title": "Battle Hub",
+  "bossFight": "Boss Encounter",
+  "strikeBoss": "Strike Boss",
+  "dealDamage": "Dealt {damage} damage!",
+  "heroHp": "HP: {current}/{max}",
+  "heroMp": "MP: {current}/{max}",
+  "questsTab": "Quests",
+  "dailyQuestsTab": "Daily Quests",
+  "habitsTab": "Habits",
+  "createQuest": "Create Quest",
+  "createDailyQuest": "Create Daily Quest",
+  "createHabit": "Create Habit",
+  "completeQuest": "Complete Quest",
+  "ghostStateTitle": "GHOST STATE",
+  "ghostStateWarning": "Your Hero fell in battle! Gain 50% less rewards until revived.",
+  "revivalQuest": "Revival Quest",
+  "reviveNow": "Revive Hero",
+  "streakDays": "{days} Day Streak"
+}

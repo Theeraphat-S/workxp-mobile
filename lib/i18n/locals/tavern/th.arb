@@ -1,0 +1,17 @@
+{
+  "@@locale": "th",
+  "title": "โรงเตี๊ยม",
+  "consumablesTab": "ไอเทมใช้สิ้นเปลือง",
+  "skinsTab": "สกินตัวละคร",
+  "themesTab": "ธีมจอ CRT",
+  "customRewardsTab": "รางวัลชีวิตจริง",
+  "buyItem": "ซื้อด้วย {cost} เหรียญ",
+  "useItem": "ใช้ไอเทม",
+  "ownedQuantity": "มีอยู่: {count}",
+  "redeemReward": "แลกรับ ({cost} เหรียญ)",
+  "createCustomReward": "สร้างรางวัลใหม่",
+  "rewardTitleLabel": "ชื่อรางวัล",
+  "rewardCostLabel": "ราคาเหรียญ",
+  "timesRedeemedCount": "แลกไปแล้ว {times} ครั้ง",
+  "insufficientCoins": "เหรียญไม่เพียงพอ!"
+}

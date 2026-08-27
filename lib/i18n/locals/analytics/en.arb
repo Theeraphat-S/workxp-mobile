@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "title": "Hall of Fame",
+  "expGrowthChart": "EXP Growth Momentum",
+  "damageDealtChart": "Boss Damage Strikes",
+  "habitHeatmap": "Habit Consistency Grid",
+  "attributeRadar": "Hero Attribute Radar",
+  "leaderboard": "Simulated Adventurer Ranking",
+  "rankHeader": "Rank",
+  "heroHeader": "Adventurer",
+  "levelHeader": "Level",
+  "expHeader": "Total EXP",
+  "emptyLogs": "No combat logs recorded yet. Complete quests to see analytics!"
+}

@@ -164,6 +164,10 @@ class _RadarChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RadarChartPainter oldDelegate) {
-    return oldDelegate.hero != hero;
+    return oldDelegate.hero.str != hero.str ||
+        oldDelegate.hero.intel != hero.intel ||
+        oldDelegate.hero.agi != hero.agi ||
+        oldDelegate.hero.vit != hero.vit ||
+        oldDelegate.hero.wis != hero.wis;
   }
 }
