@@ -5,11 +5,11 @@ A Habit tracker allowing heroes to log positive (+) and negative (-) actions thr
 
 **Blocked by:** 02: Hero Vitals, Attribute Stats & Leveling Progression Slice
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Users can create Habits with title, positive (+) and/or negative (-) actions, and Attribute tags.
-- [ ] Tapping (+) increases daily counter, awards Coins (+10), and adds MP (+15) with animated sound & haptic feedback.
-- [ ] Tapping (-) increments penalty counter, deducts Coins (-10), and drains MP (-15).
-- [ ] Skill Buffs UI allows spending MP to cast temporary buffs (Double EXP, Boss Stun).
-- [ ] Active buffs display remaining duration countdown on the Battle hub.
-- [ ] Tests verify habit counter updates, Coin/MP math boundaries, and MP buff activation logic.
+- [x] Users can create Habits with title, positive (+) and/or negative (-) actions, and Attribute tags.
+- [x] Tapping (+) increases daily counter, awards Coins (+10), and adds MP (+15) with animated sound & haptic feedback.
+- [x] Tapping (-) increments penalty counter, deducts Coins (-10), and drains MP (-15).
+- [x] Skill Buffs UI allows spending MP to cast temporary buffs (Double EXP, Boss Stun).
+- [x] Active buffs display remaining duration countdown on the Battle hub.
+- [x] Tests verify habit counter updates, Coin/MP math boundaries, and MP buff activation logic.

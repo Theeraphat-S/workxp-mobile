@@ -5,11 +5,11 @@ Robust 100% offline-first local storage persistence using Hive across all applic
 
 **Blocked by:** 06: Dungeon World Map & Boss Chapter Progression Slice, 07: The Tavern Marketplace & Custom Real-Life Rewards Slice, 08: Hall of Fame, FL Chart Analytics & Simulated Leaderboards Slice
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Hive adapters and storage boxes persist and reload Hero, Activity, Dungeon, Shop, and Stat states across app restarts.
-- [ ] On first app launch, checks if database is empty and automatically loads pre-seeded Starter Kit data.
-- [ ] Settings screen provides "Export Save File (JSON)" button allowing the user to copy/save full JSON state.
-- [ ] Settings screen provides "Import Save File (JSON)" button with schema validation and state reload.
-- [ ] Audio and Haptic toggles persist their user preferences.
-- [ ] Integration tests verify full state preservation on reload and successful JSON export/import cycles.
+- [x] Hive adapters and storage boxes persist and reload Hero, Activity, Dungeon, Shop, and Stat states across app restarts.
+- [x] On first app launch, checks if database is empty and automatically loads pre-seeded Starter Kit data.
+- [x] Settings screen provides "Export Save File (JSON)" button allowing the user to copy/save full JSON state.
+- [x] Settings screen provides "Import Save File (JSON)" button with schema validation and state reload.
+- [x] Audio and Haptic toggles persist their user preferences.
+- [x] Integration tests verify full state preservation on reload and successful JSON export/import cycles.

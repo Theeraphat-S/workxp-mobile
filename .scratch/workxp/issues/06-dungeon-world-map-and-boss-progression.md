@@ -5,10 +5,10 @@ A 16-bit retro World Map showing 4 Dungeon Chapter nodes: Chapter 1: *Slime Fore
 
 **Blocked by:** 03: Quest System & Boss Combat Strike Slice
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] World Map screen visualizes 4 Chapters with pixelated node paths, lock/unlock status, and completion progress.
-- [ ] Depleting a Boss's HP to 0 triggers a victory overlay modal with fanfare SFX, celebratory particles, and bonus loot.
-- [ ] Chapter unlocks sequentially as previous Bosses are defeated.
-- [ ] Users can review previously conquered Bosses in a Dungeon Bestiary.
-- [ ] Tests verify Boss death transition, reward distribution, and Chapter progression state persistence.
+- [x] World Map screen visualizes 4 Chapters with pixelated node paths, lock/unlock status, and completion progress.
+- [x] Depleting a Boss's HP to 0 triggers a victory overlay modal with fanfare SFX, celebratory particles, and bonus loot.
+- [x] Chapter unlocks sequentially as previous Bosses are defeated.
+- [x] Users can review previously conquered Bosses in a Dungeon Bestiary.
+- [x] Tests verify Boss death transition, reward distribution, and Chapter progression state persistence.

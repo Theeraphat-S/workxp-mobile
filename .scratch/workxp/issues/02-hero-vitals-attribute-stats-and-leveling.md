@@ -5,11 +5,11 @@ Hero state management and UI showcasing the adventurer's Level, EXP progression 
 
 **Blocked by:** 01: Flutter Foundation, 16-Bit Design System & 5-Screen Navigation Shell
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] `HeroModel` and `HeroNotifier` maintain Level, current/max EXP, HP (0-100), MP (0-100), available stat points, and allocated attributes (STR, INT, AGI, VIT, WIS).
-- [ ] Gaining EXP triggers smooth animated progress bar updates and evaluates level thresholds.
-- [ ] Level Up event triggers visual fanfare, plays level-up chiptune SFX, restores HP/MP, and grants stat points.
-- [ ] Hero Profile screen allows the user to allocate stat points into STR, INT, AGI, VIT, and WIS, updating stats in real-time.
-- [ ] Titles unlock dynamically based on highest attributes and completed milestones.
-- [ ] Unit tests verify EXP progression formula, level up transitions, and stat point allocation limits.
+- [x] `HeroModel` and `HeroNotifier` maintain Level, current/max EXP, HP (0-100), MP (0-100), available stat points, and allocated attributes (STR, INT, AGI, VIT, WIS).
+- [x] Gaining EXP triggers smooth animated progress bar updates and evaluates level thresholds.
+- [x] Level Up event triggers visual fanfare, plays level-up chiptune SFX, restores HP/MP, and grants stat points.
+- [x] Hero Profile screen allows the user to allocate stat points into STR, INT, AGI, VIT, and WIS, updating stats in real-time.
+- [x] Titles unlock dynamically based on highest attributes and completed milestones.
+- [x] Unit tests verify EXP progression formula, level up transitions, and stat point allocation limits.

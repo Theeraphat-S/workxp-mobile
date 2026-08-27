@@ -5,10 +5,10 @@ A runnable Flutter mobile application with Riverpod state management and Hive st
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Flutter project structure is configured with `flutter_riverpod`, `hive_flutter`, `google_fonts`, `fl_chart`, and audio/haptic capabilities.
-- [ ] 16-bit retro pixel design system with color palette, custom pixel frame borders, and pixelated button components is implemented.
-- [ ] Bottom navigation bar contains 5 tabs (`Battle`, `World Map`, `Tavern`, `Stats`, `Profile`) with active icon indicators and smooth screen switching.
-- [ ] Sensory service is in place to synthesize/play 8-bit chiptune sound effects and trigger haptic feedback.
-- [ ] Base smoke test verifies that the application launches and navigation tabs switch reliably.
+- [x] Flutter project structure is configured with `flutter_riverpod`, `hive_flutter`, `google_fonts`, `fl_chart`, and audio/haptic capabilities.
+- [x] 16-bit retro pixel design system with color palette, custom pixel frame borders, and pixelated button components is implemented.
+- [x] Bottom navigation bar contains 5 tabs (`Battle`, `World Map`, `Tavern`, `Stats`, `Profile`) with active icon indicators and smooth screen switching.
+- [x] Sensory service is in place to synthesize/play 8-bit chiptune sound effects and trigger haptic feedback.
+- [x] Base smoke test verifies that the application launches and navigation tabs switch reliably.

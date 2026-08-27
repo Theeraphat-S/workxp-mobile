@@ -9,12 +9,12 @@ Purchasing or redeeming items deducts the required Coins from the Hero's purse a
 
 **Blocked by:** 02: Hero Vitals, Attribute Stats & Leveling Progression Slice, 05: Habit Tracker, Coin Economy & MP Skill Buffs Slice
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Tavern screen with 3 filterable tabs: Consumables, Pixel Skins & Themes, and Custom Rewards.
-- [ ] Users can purchase consumables and store them in their Inventory.
-- [ ] Inventory screen enables consuming Potions (restoring HP) or using Streak Shields (protecting streak).
-- [ ] Users can purchase and equip Pixel Avatar skins and switch Retro CRT theme modes.
-- [ ] Users can create, edit, and delete custom real-life rewards with custom titles and Coin prices.
-- [ ] Redeeming a custom real-life reward deducts Coins and shows a rewarding completion dialog.
-- [ ] Tests verify coin deduction, insufficient coin error prevention, and inventory item usage.
+- [x] Tavern screen with 3 filterable tabs: Consumables, Pixel Skins & Themes, and Custom Rewards.
+- [x] Users can purchase consumables and store them in their Inventory.
+- [x] Inventory screen enables consuming Potions (restoring HP) or using Streak Shields (protecting streak).
+- [x] Users can purchase and equip Pixel Avatar skins and switch Retro CRT theme modes.
+- [x] Users can create, edit, and delete custom real-life rewards with custom titles and Coin prices.
+- [x] Redeeming a custom real-life reward deducts Coins and shows a rewarding completion dialog.
+- [x] Tests verify coin deduction, insufficient coin error prevention, and inventory item usage.

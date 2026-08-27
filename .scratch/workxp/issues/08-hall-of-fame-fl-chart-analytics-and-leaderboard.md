@@ -10,13 +10,13 @@ Also includes permanent unlockable Achievements and a simulated offline Guild Le
 
 **Blocked by:** 03: Quest System & Boss Combat Strike Slice, 04: Daily Quest 24-Hour Cycle, Streak Protection & Ghost State Slice, 05: Habit Tracker, Coin Economy & MP Skill Buffs Slice
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Analytics service records timestamped logs for EXP gained, damage dealt, and habit completions.
-- [ ] EXP Line Chart renders dynamic curve with custom pixelated tooltips using FL Chart.
-- [ ] Damage Bar Chart shows weekly damage output with retro styled bars.
-- [ ] 16-Bit Habit Heatmap renders a grid of green/gold pixel squares reflecting monthly consistency.
-- [ ] Hexagon Radar Chart displays the Hero's current Attribute balance.
-- [ ] Achievements list evaluates milestones (e.g. 10 Quests, First Boss Down, 7-Day Streak) and unlocks trophy badges.
-- [ ] Simulated Guild Leaderboard shows weekly rankings of the player against offline RPG rivals.
-- [ ] Tests verify analytics aggregation algorithms and achievement unlock condition evaluations.
+- [x] Analytics service records timestamped logs for EXP gained, damage dealt, and habit completions.
+- [x] EXP Line Chart renders dynamic curve with custom pixelated tooltips using FL Chart.
+- [x] Damage Bar Chart shows weekly damage output with retro styled bars.
+- [x] 16-Bit Habit Heatmap renders a grid of green/gold pixel squares reflecting monthly consistency.
+- [x] Hexagon Radar Chart displays the Hero's current Attribute balance.
+- [x] Achievements list evaluates milestones (e.g. 10 Quests, First Boss Down, 7-Day Streak) and unlocks trophy badges.
+- [x] Simulated Guild Leaderboard shows weekly rankings of the player against offline RPG rivals.
+- [x] Tests verify analytics aggregation algorithms and achievement unlock condition evaluations.
