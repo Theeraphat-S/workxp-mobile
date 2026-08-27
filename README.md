@@ -9,12 +9,11 @@
 [![State Management](https://img.shields.io/badge/BLoC-flutter__bloc%209.1-9900FF?style=for-the-badge)](https://bloclibrary.dev)
 [![Persistence](https://img.shields.io/badge/Drift-SQLite%202.23-00A98F?style=for-the-badge)](https://drift.simonbinder.eu)
 [![Routing](https://img.shields.io/badge/AutoRoute-10.1-FF5722?style=for-the-badge)](https://autoroute.vercel.app)
-[![Tests](https://img.shields.io/badge/Tests-279%2F279%20Passed%20(100%25)-brightgreen?style=for-the-badge)](./TEST_READY.md)
-[![Analysis](https://img.shields.io/badge/Analysis-0%20Issues%20(Clean)-brightgreen?style=for-the-badge)](https://dart.dev/tools/analysis)
+
 
 ---
 
-[English](#-english) • [ภาษาไทย](#-ภาษาไทย) • [Architecture](#-architecture--สถาปัตยกรรม) • [Getting Started](#-getting-started--การเริ่มต้นใช้งาน) • [Testing](#-testing--การทดสอบระบบ)
+[English](#-english) • [ภาษาไทย](#-ภาษาไทย) • [Architecture](#-architecture--สถาปัตยกรรม) • [Getting Started](#-getting-started--การเริ่มต้นใช้งาน)
 
 ---
 
@@ -185,30 +184,6 @@ graph TD
    ```bash
    flutter run
    ```
-
----
-
-## 🧪 Testing & Quality / การทดสอบระบบ
-
-WorkXP maintains strict test discipline via an automated **4-Tier Opaque-Box Test Architecture** and clean static analysis:
-
-| Test Tier | Focus & Coverage | Test Cases | Status |
-|---|---|:---:|:---:|
-| **Tier 1 (Unit)** | Combat Math, Progression, Habit Economy, Day Cycle, i18n, Locator | 46 tests | ✅ PASS |
-| **Tier 2 (Boundary)** | Overflow, Negative Clamping, Overkill, Stat Exhaustion, Corrupted JSON | 10 tests | ✅ PASS |
-| **Tier 3 (Combinations)** | Cross-feature pairwise interactions (Combat + Buffs + Ghost State) | 4 tests | ✅ PASS |
-| **Tier 4 (E2E Journeys)** | Real-world user journeys (Onboarding, Midnight Crisis, Revival) | 4 tests | ✅ PASS |
-| **Feature Widgets** | AutoRoute Shell, Battle Hub, Dungeon Map, Tavern, Analytics | 215 tests | ✅ PASS |
-| **Total** | **All 49 Test Suites Combined** | **279 tests** | **100% PASS** |
-
-### Run Test Suite & Static Analysis
-```bash
-# Run all unit, boundary, combination, widget, and e2e tests
-flutter test
-
-# Run static analysis (0 errors, 0 warnings, 0 lints)
-flutter analyze
-```
 
 ---
 
