@@ -53,12 +53,15 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         ),
         body: BlocBuilder<AnalyticsBloc, AnalyticsState>(
           builder: (context, state) {
-            final dailyLogs =
-                state is AnalyticsLoaded ? state.dailyLogs : <DailyActivityLog>[];
-            final achievements =
-                state is AnalyticsLoaded ? state.achievements : <AchievementModel>[];
-            final leaderboard =
-                state is AnalyticsLoaded ? state.leaderboard : <LeaderboardEntryModel>[];
+            final dailyLogs = state is AnalyticsLoaded
+                ? state.dailyLogs
+                : <DailyActivityLog>[];
+            final achievements = state is AnalyticsLoaded
+                ? state.achievements
+                : <AchievementModel>[];
+            final leaderboard = state is AnalyticsLoaded
+                ? state.leaderboard
+                : <LeaderboardEntryModel>[];
             final hero = state is AnalyticsLoaded ? state.hero : null;
             final heroModel = state is AnalyticsLoaded ? state.heroModel : null;
 
@@ -81,10 +84,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     const SizedBox(height: 16),
 
                     // 4. Attribute Balance Radar Chart
-                    AttributeRadarCard(
-                      hero: hero,
-                      heroModel: heroModel,
-                    ),
+                    AttributeRadarCard(hero: hero, heroModel: heroModel),
                     const SizedBox(height: 16),
 
                     // 5. Lifetime Achievements System

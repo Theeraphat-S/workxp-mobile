@@ -29,14 +29,16 @@ class DailyQuestTabView extends StatelessWidget {
   List<DailyQuestModel> get _combinedDailies {
     if (dailies.isNotEmpty) return dailies;
     return driftDailies
-        .map((d) => DailyQuestModel(
-              id: d.id,
-              title: d.title,
-              description: d.description,
-              isCompletedToday: d.isCompleted,
-              streak: d.streak,
-              lastCompletedDate: d.lastCompletedDate,
-            ))
+        .map(
+          (d) => DailyQuestModel(
+            id: d.id,
+            title: d.title,
+            description: d.description,
+            isCompletedToday: d.isCompleted,
+            streak: d.streak,
+            lastCompletedDate: d.lastCompletedDate,
+          ),
+        )
         .toList();
   }
 
@@ -201,13 +203,14 @@ class DailyQuestTabView extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     daily.title,
-                    style: PixelTypography.pixelSubheader(
-                      fontSize: 11,
+                    style: PixelTypography.readableTitle(
+                      fontSize: 13,
                       color: daily.isCompletedToday
                           ? PixelColors.textMuted
                           : PixelColors.textBright,
                     ),
                   ),
+
                   if (daily.description.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(

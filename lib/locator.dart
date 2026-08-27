@@ -104,12 +104,8 @@ Future<void> setupLocator({
       () => LanguageBloc(locator<HiveConfig>()),
     );
   }
-  locator.registerFactory<HeroBloc>(
-    () => HeroBloc(locator<HeroRepository>()),
-  );
-  locator.registerFactory<BossBloc>(
-    () => BossBloc(locator<BossRepository>()),
-  );
+  locator.registerFactory<HeroBloc>(() => HeroBloc(locator<HeroRepository>()));
+  locator.registerFactory<BossBloc>(() => BossBloc(locator<BossRepository>()));
   locator.registerFactory<QuestBloc>(
     () => QuestBloc(
       questRepository: locator<QuestRepository>(),

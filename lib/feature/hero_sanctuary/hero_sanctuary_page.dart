@@ -42,10 +42,7 @@ class HeroSanctuaryPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // 1. Hero Summary Profile Card
-                    HeroCardWidget(
-                      hero: hero,
-                      heroModel: heroModel,
-                    ),
+                    HeroCardWidget(hero: hero, heroModel: heroModel),
                     const SizedBox(height: 16),
 
                     // 2. Stat Attributes Allocation
@@ -53,9 +50,9 @@ class HeroSanctuaryPage extends StatelessWidget {
                       hero: hero,
                       heroModel: heroModel,
                       onAllocate: (attr) {
-                        context
-                            .read<SanctuaryBloc>()
-                            .add(AllocateStatPoint(attr));
+                        context.read<SanctuaryBloc>().add(
+                          AllocateStatPoint(attr),
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
@@ -65,9 +62,9 @@ class HeroSanctuaryPage extends StatelessWidget {
                       hero: hero,
                       heroModel: heroModel,
                       onSelectSkin: (skinId) {
-                        context
-                            .read<SanctuaryBloc>()
-                            .add(EquipSkinEvent(skinId));
+                        context.read<SanctuaryBloc>().add(
+                          EquipSkinEvent(skinId),
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
@@ -77,9 +74,9 @@ class HeroSanctuaryPage extends StatelessWidget {
                       hero: hero,
                       heroModel: heroModel,
                       onSelectTitle: (title) {
-                        context
-                            .read<SanctuaryBloc>()
-                            .add(EquipTitleEvent(title));
+                        context.read<SanctuaryBloc>().add(
+                          EquipTitleEvent(title),
+                        );
                       },
                     ),
                     const SizedBox(height: 16),

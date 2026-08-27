@@ -26,7 +26,8 @@ class SkinSelectionWidget extends StatelessWidget {
     {'id': 'cyber_samurai', 'name': 'Cyber Samurai'},
   ];
 
-  String get activeSkinId => hero?.avatarSkinId ?? heroModel?.activeSkinId ?? 'hero_novice';
+  String get activeSkinId =>
+      hero?.avatarSkinId ?? heroModel?.activeSkinId ?? 'hero_novice';
 
   bool _isUnlocked(String skinId) {
     if (skinId == 'hero_novice') return true;

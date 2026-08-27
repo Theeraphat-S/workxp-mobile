@@ -18,11 +18,11 @@ class QuestBloc extends Bloc<QuestEvent, QuestState> {
     required HeroRepository heroRepository,
     required BossRepository bossRepository,
     required CombatLogRepository combatLogRepository,
-  })  : _questRepository = questRepository,
-        _heroRepository = heroRepository,
-        _bossRepository = bossRepository,
-        _combatLogRepository = combatLogRepository,
-        super(const QuestInitial()) {
+  }) : _questRepository = questRepository,
+       _heroRepository = heroRepository,
+       _bossRepository = bossRepository,
+       _combatLogRepository = combatLogRepository,
+       super(const QuestInitial()) {
     on<LoadQuests>(_onLoadQuests);
     on<QuestsUpdated>(_onQuestsUpdated);
     on<CreateQuest>(_onCreateQuest);
@@ -49,12 +49,10 @@ class QuestBloc extends Bloc<QuestEvent, QuestState> {
 
   void _onQuestsUpdated(QuestsUpdated event, Emitter<QuestState> emit) {
     _cachedQuests = event.quests;
-    final lastDamage =
-        state is QuestLoaded ? (state as QuestLoaded).lastStrikeDamage : 0;
-    emit(QuestLoaded(
-      quests: _cachedQuests,
-      lastStrikeDamage: lastDamage,
-    ));
+    final lastDamage = state is QuestLoaded
+        ? (state as QuestLoaded).lastStrikeDamage
+        : 0;
+    emit(QuestLoaded(quests: _cachedQuests, lastStrikeDamage: lastDamage));
   }
 
   Future<void> _onCreateQuest(
@@ -83,7 +81,9 @@ class QuestBloc extends Bloc<QuestEvent, QuestState> {
   ) async {
     try {
       final hero = await _heroRepository.watchHero().first;
-      final targetQuest = _cachedQuests.where((q) => q.id == event.questId).firstOrNull;
+      final targetQuest = _cachedQuests
+          .where((q) => q.id == event.questId)
+          .firstOrNull;
 
       if (targetQuest == null) return;
 
@@ -115,10 +115,9 @@ class QuestBloc extends Bloc<QuestEvent, QuestState> {
       SensoryService.instance.playSwordSlash();
       SensoryService.instance.playCoin();
 
-      emit(QuestLoaded(
-        quests: _cachedQuests,
-        lastStrikeDamage: totalStrikeDamage,
-      ));
+      emit(
+        QuestLoaded(quests: _cachedQuests, lastStrikeDamage: totalStrikeDamage),
+      );
     } catch (e) {
       emit(QuestError('Failed to complete quest: $e'));
     }
@@ -141,10 +140,7 @@ class QuestBloc extends Bloc<QuestEvent, QuestState> {
     Emitter<QuestState> emit,
   ) {
     if (state is QuestLoaded) {
-      emit(QuestLoaded(
-        quests: _cachedQuests,
-        lastStrikeDamage: 0,
-      ));
+      emit(QuestLoaded(quests: _cachedQuests, lastStrikeDamage: 0));
     }
   }
 

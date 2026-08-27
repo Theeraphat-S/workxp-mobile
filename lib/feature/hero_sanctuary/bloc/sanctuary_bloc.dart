@@ -15,9 +15,9 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
   SanctuaryBloc({
     required HeroRepository heroRepository,
     required AppDatabase appDatabase,
-  })  : _heroRepository = heroRepository,
-        _appDatabase = appDatabase,
-        super(const SanctuaryInitial()) {
+  }) : _heroRepository = heroRepository,
+       _appDatabase = appDatabase,
+       super(const SanctuaryInitial()) {
     on<LoadSanctuary>(_onLoadSanctuary);
     on<SanctuaryHeroUpdated>(_onSanctuaryHeroUpdated);
     on<AllocateStatPoint>(_onAllocateStatPoint);
@@ -73,12 +73,14 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
       activeTitleId: hero?.activeTitle ?? 'Novice Adventurer',
     );
 
-    emit(SanctuaryLoaded(
-      hero: hero,
-      heroModel: heroModel,
-      sfxEnabled: SensoryService.instance.isSfxEnabled,
-      hapticsEnabled: SensoryService.instance.isHapticsEnabled,
-    ));
+    emit(
+      SanctuaryLoaded(
+        hero: hero,
+        heroModel: heroModel,
+        sfxEnabled: SensoryService.instance.isSfxEnabled,
+        hapticsEnabled: SensoryService.instance.isHapticsEnabled,
+      ),
+    );
   }
 
   Future<void> _onAllocateStatPoint(
@@ -140,7 +142,10 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
     }
   }
 
-  void _onToggleHaptics(ToggleHapticsEvent event, Emitter<SanctuaryState> emit) {
+  void _onToggleHaptics(
+    ToggleHapticsEvent event,
+    Emitter<SanctuaryState> emit,
+  ) {
     SensoryService.instance.toggleHaptics(event.enabled);
     if (state is SanctuaryLoaded) {
       emit((state as SanctuaryLoaded).copyWith(hapticsEnabled: event.enabled));
@@ -152,7 +157,9 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
     Emitter<SanctuaryState> emit,
   ) async {
     try {
-      final hero = await _appDatabase.select(_appDatabase.heroes).getSingleOrNull();
+      final hero = await _appDatabase
+          .select(_appDatabase.heroes)
+          .getSingleOrNull();
       final bosses = await _appDatabase.select(_appDatabase.bosses).get();
       final quests = await _appDatabase.select(_appDatabase.quests).get();
       final dailies = await _appDatabase.select(_appDatabase.dailyQuests).get();
@@ -184,66 +191,78 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
               }
             : null,
         'bosses': bosses
-            .map((b) => {
-                  'id': b.id,
-                  'name': b.name,
-                  'currentHp': b.currentHp,
-                  'maxHp': b.maxHp,
-                  'chapter': b.chapter,
-                  'isDefeated': b.isDefeated,
-                  'isActive': b.isActive,
-                })
+            .map(
+              (b) => {
+                'id': b.id,
+                'name': b.name,
+                'currentHp': b.currentHp,
+                'maxHp': b.maxHp,
+                'chapter': b.chapter,
+                'isDefeated': b.isDefeated,
+                'isActive': b.isActive,
+              },
+            )
             .toList(),
         'quests': quests
-            .map((q) => {
-                  'id': q.id,
-                  'title': q.title,
-                  'description': q.description,
-                  'rank': q.rank,
-                  'baseDamage': q.baseDamage,
-                  'expReward': q.expReward,
-                  'coinReward': q.coinReward,
-                  'isCompleted': q.isCompleted,
-                })
+            .map(
+              (q) => {
+                'id': q.id,
+                'title': q.title,
+                'description': q.description,
+                'rank': q.rank,
+                'baseDamage': q.baseDamage,
+                'expReward': q.expReward,
+                'coinReward': q.coinReward,
+                'isCompleted': q.isCompleted,
+              },
+            )
             .toList(),
         'dailyQuests': dailies
-            .map((d) => {
-                  'id': d.id,
-                  'title': d.title,
-                  'description': d.description,
-                  'isCompleted': d.isCompleted,
-                  'streak': d.streak,
-                })
+            .map(
+              (d) => {
+                'id': d.id,
+                'title': d.title,
+                'description': d.description,
+                'isCompleted': d.isCompleted,
+                'streak': d.streak,
+              },
+            )
             .toList(),
         'habits': habits
-            .map((h) => {
-                  'id': h.id,
-                  'title': h.title,
-                  'isPositive': h.isPositive,
-                  'isNegative': h.isNegative,
-                  'positiveCount': h.positiveCount,
-                  'negativeCount': h.negativeCount,
-                })
+            .map(
+              (h) => {
+                'id': h.id,
+                'title': h.title,
+                'isPositive': h.isPositive,
+                'isNegative': h.isNegative,
+                'positiveCount': h.positiveCount,
+                'negativeCount': h.negativeCount,
+              },
+            )
             .toList(),
         'tavernItems': items
-            .map((i) => {
-                  'id': i.id,
-                  'name': i.name,
-                  'cost': i.cost,
-                  'category': i.category,
-                  'isPurchased': i.isPurchased,
-                  'quantity': i.quantity,
-                })
+            .map(
+              (i) => {
+                'id': i.id,
+                'name': i.name,
+                'cost': i.cost,
+                'category': i.category,
+                'isPurchased': i.isPurchased,
+                'quantity': i.quantity,
+              },
+            )
             .toList(),
       };
 
       final jsonString = const JsonEncoder.withIndent('  ').convert(backupData);
 
       if (state is SanctuaryLoaded) {
-        emit((state as SanctuaryLoaded).copyWith(
-          exportedBackupJson: jsonString,
-          backupStatusMessage: 'Export successful!',
-        ));
+        emit(
+          (state as SanctuaryLoaded).copyWith(
+            exportedBackupJson: jsonString,
+            backupStatusMessage: 'Export successful!',
+          ),
+        );
       }
     } catch (e) {
       emit(SanctuaryError('Failed to export backup: $e'));
@@ -259,9 +278,11 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
       // Process restoration
       SensoryService.instance.playVictory();
       if (state is SanctuaryLoaded) {
-        emit((state as SanctuaryLoaded).copyWith(
-          backupStatusMessage: 'Save game successfully restored!',
-        ));
+        emit(
+          (state as SanctuaryLoaded).copyWith(
+            backupStatusMessage: 'Save game successfully restored!',
+          ),
+        );
       }
     } catch (e) {
       emit(SanctuaryError('Failed to import backup: $e'));

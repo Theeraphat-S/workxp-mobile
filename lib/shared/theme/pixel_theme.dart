@@ -5,7 +5,10 @@ import 'pixel_typography.dart';
 class PixelTheme {
   PixelTheme._();
 
-  static ThemeData darkTheme({bool crtMode = false, String themeName = 'default'}) {
+  static ThemeData darkTheme({
+    bool crtMode = false,
+    String themeName = 'default',
+  }) {
     Color primaryColor = PixelColors.coinGold;
     if (themeName == 'theme_amber') {
       primaryColor = PixelColors.coinAmber;

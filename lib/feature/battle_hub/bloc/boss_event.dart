@@ -13,10 +13,7 @@ class LoadBoss extends BossEvent {
 }
 
 class BossUpdated extends BossEvent {
-  const BossUpdated({
-    required this.activeBoss,
-    required this.allBosses,
-  });
+  const BossUpdated({required this.activeBoss, required this.allBosses});
 
   final Boss? activeBoss;
   final List<Boss> allBosses;

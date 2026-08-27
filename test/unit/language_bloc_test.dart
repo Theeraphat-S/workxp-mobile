@@ -35,9 +35,7 @@ void main() {
       'emits updated LanguageState and persists to Hive when ChangeLanguage is added',
       build: () => LanguageBloc(hiveConfig),
       act: (bloc) => bloc.add(const ChangeLanguage(Locale('th'))),
-      expect: () => [
-        const LanguageState(Locale('th')),
-      ],
+      expect: () => [const LanguageState(Locale('th'))],
       verify: (_) {
         expect(hiveConfig.locale, 'th');
       },
@@ -50,9 +48,7 @@ void main() {
         return LanguageBloc(hiveConfig);
       },
       act: (bloc) => bloc.add(const ChangeLanguage(Locale('en'))),
-      expect: () => [
-        const LanguageState(Locale('en')),
-      ],
+      expect: () => [const LanguageState(Locale('en'))],
       verify: (_) {
         expect(hiveConfig.locale, 'en');
       },
@@ -65,9 +61,7 @@ void main() {
         await hiveConfig.setLocale('th');
         bloc.add(const LoadLanguage());
       },
-      expect: () => [
-        const LanguageState(Locale('th')),
-      ],
+      expect: () => [const LanguageState(Locale('th'))],
     );
 
     test('LanguageEvent and LanguageState equality and props', () {

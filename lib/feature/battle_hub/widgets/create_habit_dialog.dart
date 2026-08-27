@@ -103,8 +103,7 @@ class _CreateHabitDialogState extends State<CreateHabitDialog> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: () =>
-                          setState(() => _hasPositive = !_hasPositive),
+                      onTap: () => setState(() => _hasPositive = !_hasPositive),
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -149,8 +148,7 @@ class _CreateHabitDialogState extends State<CreateHabitDialog> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: InkWell(
-                      onTap: () =>
-                          setState(() => _hasNegative = !_hasNegative),
+                      onTap: () => setState(() => _hasNegative = !_hasNegative),
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(

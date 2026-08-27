@@ -20,10 +20,7 @@ class I18n {
 
   static const LocalizationsDelegate<I18n> delegate = _I18nDelegate();
 
-  static const List<Locale> supportedLocales = [
-    Locale('en'),
-    Locale('th'),
-  ];
+  static const List<Locale> supportedLocales = [Locale('en'), Locale('th')];
 
   late final AnalyticsI18n analytics = AnalyticsI18n(locale);
   late final BattleHubI18n battleHub = BattleHubI18n(locale);
@@ -74,7 +71,8 @@ class AnalyticsI18n {
       'heroHeader': 'Adventurer',
       'levelHeader': 'Level',
       'expHeader': 'Total EXP',
-      'emptyLogs': 'No combat logs recorded yet. Complete quests to see analytics!',
+      'emptyLogs':
+          'No combat logs recorded yet. Complete quests to see analytics!',
     },
     'th': {
       'title': 'หอเกียรติยศ',
@@ -135,7 +133,8 @@ class BattleHubI18n {
       'createHabit': 'Create Habit',
       'completeQuest': 'Complete Quest',
       'ghostStateTitle': 'GHOST STATE',
-      'ghostStateWarning': 'Your Hero fell in battle! Gain 50% less rewards until revived.',
+      'ghostStateWarning':
+          'Your Hero fell in battle! Gain 50% less rewards until revived.',
       'revivalQuest': 'Revival Quest',
       'reviveNow': 'Revive Hero',
       'streakDays': '{days} Day Streak',
@@ -155,7 +154,8 @@ class BattleHubI18n {
       'createHabit': 'สร้างกิจวัตร',
       'completeQuest': 'ทำเควสต์สำเร็จ',
       'ghostStateTitle': 'สถานะวิญญาณ',
-      'ghostStateWarning': 'ฮีโร่ของคุณพ่ายแพ้ในการรบ! รางวัลลดลง 50% จนกว่าจะฟื้นคืนชีพ',
+      'ghostStateWarning':
+          'ฮีโร่ของคุณพ่ายแพ้ในการรบ! รางวัลลดลง 50% จนกว่าจะฟื้นคืนชีพ',
       'revivalQuest': 'เควสต์ฟื้นคืนชีพ',
       'reviveNow': 'ชุบชีวิตฮีโร่',
       'streakDays': 'ทำต่อเนื่อง {days} วัน',
@@ -183,8 +183,10 @@ class BattleHubI18n {
   String get ghostStateTitle => lookup('ghostStateTitle');
   String get ghostStateWarning => lookup('ghostStateWarning');
   String get habitsTab => lookup('habitsTab');
-  String heroHp(Object current, Object max) => lookup('heroHp', {'current': current, 'max': max});
-  String heroMp(Object current, Object max) => lookup('heroMp', {'current': current, 'max': max});
+  String heroHp(Object current, Object max) =>
+      lookup('heroHp', {'current': current, 'max': max});
+  String heroMp(Object current, Object max) =>
+      lookup('heroMp', {'current': current, 'max': max});
   String get questsTab => lookup('questsTab');
   String get revivalQuest => lookup('revivalQuest');
   String get reviveNow => lookup('reviveNow');
@@ -242,7 +244,8 @@ class DungeonI18n {
   String get chapter2Name => lookup('chapter2Name');
   String get chapter3Name => lookup('chapter3Name');
   String get chapter4Name => lookup('chapter4Name');
-  String chapterTitle(Object chapter, Object name) => lookup('chapterTitle', {'chapter': chapter, 'name': name});
+  String chapterTitle(Object chapter, Object name) =>
+      lookup('chapterTitle', {'chapter': chapter, 'name': name});
   String get title => lookup('title');
   String get unlockRequirement => lookup('unlockRequirement');
 }
@@ -305,7 +308,8 @@ class GeneralI18n {
   String get confirm => lookup('confirm');
   String get delete => lookup('delete');
   String get error => lookup('error');
-  String exp(Object current, Object max) => lookup('exp', {'current': current, 'max': max});
+  String exp(Object current, Object max) =>
+      lookup('exp', {'current': current, 'max': max});
   String level(Object level) => lookup('level', {'level': level});
   String get loading => lookup('loading');
   String get retry => lookup('retry');
@@ -395,7 +399,8 @@ class HeroSanctuaryI18n {
   String get soundEffects => lookup('soundEffects');
   String get strengthLabel => lookup('strengthLabel');
   String get title => lookup('title');
-  String unallocatedPoints(Object points) => lookup('unallocatedPoints', {'points': points});
+  String unallocatedPoints(Object points) =>
+      lookup('unallocatedPoints', {'points': points});
   String get vitalityLabel => lookup('vitalityLabel');
   String get wisdomLabel => lookup('wisdomLabel');
 }
@@ -494,13 +499,15 @@ class TavernI18n {
   String get createCustomReward => lookup('createCustomReward');
   String get customRewardsTab => lookup('customRewardsTab');
   String get insufficientCoins => lookup('insufficientCoins');
-  String ownedQuantity(Object count) => lookup('ownedQuantity', {'count': count});
+  String ownedQuantity(Object count) =>
+      lookup('ownedQuantity', {'count': count});
   String redeemReward(Object cost) => lookup('redeemReward', {'cost': cost});
   String get rewardCostLabel => lookup('rewardCostLabel');
   String get rewardTitleLabel => lookup('rewardTitleLabel');
   String get skinsTab => lookup('skinsTab');
   String get themesTab => lookup('themesTab');
-  String timesRedeemedCount(Object times) => lookup('timesRedeemedCount', {'times': times});
+  String timesRedeemedCount(Object times) =>
+      lookup('timesRedeemedCount', {'times': times});
   String get title => lookup('title');
   String get useItem => lookup('useItem');
 }

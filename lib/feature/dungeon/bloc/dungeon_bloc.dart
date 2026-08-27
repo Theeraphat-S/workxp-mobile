@@ -34,25 +34,16 @@ class DungeonBloc extends Bloc<DungeonEvent, DungeonState> {
 
     _allBossesSub = _bossRepository.watchAllBosses().listen((bosses) {
       _cachedBosses = bosses;
-      add(DungeonUpdated(
-        bosses: _cachedBosses,
-        activeBoss: _cachedActiveBoss,
-      ));
+      add(DungeonUpdated(bosses: _cachedBosses, activeBoss: _cachedActiveBoss));
     });
 
     _activeBossSub = _bossRepository.watchActiveBoss().listen((boss) {
       _cachedActiveBoss = boss;
-      add(DungeonUpdated(
-        bosses: _cachedBosses,
-        activeBoss: _cachedActiveBoss,
-      ));
+      add(DungeonUpdated(bosses: _cachedBosses, activeBoss: _cachedActiveBoss));
     });
   }
 
-  void _onDungeonUpdated(
-    DungeonUpdated event,
-    Emitter<DungeonState> emit,
-  ) {
+  void _onDungeonUpdated(DungeonUpdated event, Emitter<DungeonState> emit) {
     int maxUnlocked = 1;
     for (final boss in event.bosses) {
       if (boss.isDefeated) {
@@ -63,11 +54,13 @@ class DungeonBloc extends Bloc<DungeonEvent, DungeonState> {
     }
     if (maxUnlocked > 4) maxUnlocked = 4;
 
-    emit(DungeonLoaded(
-      bosses: event.bosses,
-      activeBoss: event.activeBoss,
-      unlockedChapterMax: maxUnlocked,
-    ));
+    emit(
+      DungeonLoaded(
+        bosses: event.bosses,
+        activeBoss: event.activeBoss,
+        unlockedChapterMax: maxUnlocked,
+      ),
+    );
   }
 
   Future<void> _onSelectChapter(

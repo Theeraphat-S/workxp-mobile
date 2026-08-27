@@ -55,10 +55,13 @@ class _BossEncounterCardState extends State<BossEncounterCard>
   Widget build(BuildContext context) {
     final chapter = widget.boss?.chapter ?? widget.bossModel?.chapter ?? 1;
     final name = widget.boss?.name ?? widget.bossModel?.name ?? 'King Slime';
-    final currentHp = widget.boss?.currentHp ?? widget.bossModel?.currentHp ?? 500;
+    final currentHp =
+        widget.boss?.currentHp ?? widget.bossModel?.currentHp ?? 500;
     final maxHp = widget.boss?.maxHp ?? widget.bossModel?.maxHp ?? 500;
-    final spriteType = widget.boss?.iconAsset ?? widget.bossModel?.spriteType ?? 'boss_slime';
-    final isDefeated = widget.boss?.isDefeated ?? widget.bossModel?.isDefeated ?? false;
+    final spriteType =
+        widget.boss?.iconAsset ?? widget.bossModel?.spriteType ?? 'boss_slime';
+    final isDefeated =
+        widget.boss?.isDefeated ?? widget.bossModel?.isDefeated ?? false;
 
     return AnimatedBuilder(
       animation: _shakeController,
@@ -107,9 +110,7 @@ class _BossEncounterCardState extends State<BossEncounterCard>
               ],
             ),
             const SizedBox(height: 12),
-            Center(
-              child: PixelSprite(spriteType: spriteType, size: 80),
-            ),
+            Center(child: PixelSprite(spriteType: spriteType, size: 80)),
             const SizedBox(height: 8),
             Text(
               name.toUpperCase(),

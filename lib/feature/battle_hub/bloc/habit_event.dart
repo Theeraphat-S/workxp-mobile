@@ -21,10 +21,7 @@ class HabitsUpdated extends HabitEvent {
 }
 
 class LogHabit extends HabitEvent {
-  const LogHabit({
-    required this.id,
-    required this.isPositive,
-  });
+  const LogHabit({required this.id, required this.isPositive});
 
   final String id;
   final bool isPositive;

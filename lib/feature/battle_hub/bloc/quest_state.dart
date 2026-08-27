@@ -49,11 +49,11 @@ class QuestLoaded extends QuestState {
 
   @override
   List<Object?> get props => [
-        quests,
-        lastStrikeDamage,
-        isCritical,
-        completedQuestId,
-      ];
+    quests,
+    lastStrikeDamage,
+    isCritical,
+    completedQuestId,
+  ];
 }
 
 class QuestError extends QuestState {

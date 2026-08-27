@@ -169,11 +169,11 @@ class _ExpLineChartCardState extends State<ExpLineChartCard> {
                       show: true,
                       getDotPainter: (spot, percent, bar, index) =>
                           FlDotSquarePainter(
-                        size: 6,
-                        color: PixelColors.expPink,
-                        strokeColor: PixelColors.borderDark,
-                        strokeWidth: 1.5,
-                      ),
+                            size: 6,
+                            color: PixelColors.expPink,
+                            strokeColor: PixelColors.borderDark,
+                            strokeWidth: 1.5,
+                          ),
                     ),
                     belowBarData: BarAreaData(
                       show: true,

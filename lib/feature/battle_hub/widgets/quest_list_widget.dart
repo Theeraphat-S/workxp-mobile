@@ -36,13 +36,15 @@ class _QuestListWidgetState extends State<QuestListWidget> {
   List<QuestModel> get _combinedQuests {
     if (widget.quests.isNotEmpty) return widget.quests;
     return widget.driftQuests
-        .map((q) => QuestModel(
-              id: q.id,
-              title: q.title,
-              description: q.description,
-              rank: q.rank,
-              isCompleted: q.isCompleted,
-            ))
+        .map(
+          (q) => QuestModel(
+            id: q.id,
+            title: q.title,
+            description: q.description,
+            rank: q.rank,
+            isCompleted: q.isCompleted,
+          ),
+        )
         .toList();
   }
 
@@ -59,8 +61,9 @@ class _QuestListWidgetState extends State<QuestListWidget> {
   @override
   Widget build(BuildContext context) {
     final activeQuests = _filteredQuests.where((q) => !q.isCompleted).toList();
-    final completedQuests =
-        _filteredQuests.where((q) => q.isCompleted).toList();
+    final completedQuests = _filteredQuests
+        .where((q) => q.isCompleted)
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,53 +99,54 @@ class _QuestListWidgetState extends State<QuestListWidget> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
-              'ALL',
-              'E',
-              'D',
-              'C',
-              'B',
-              'A',
-              'S',
-              'STR',
-              'INT',
-              'AGI',
-              'VIT',
-              'WIS',
-            ].map((filter) {
-              final isSelected = filter == _selectedFilter;
-              return Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: InkWell(
-                  onTap: () => setState(() => _selectedFilter = filter),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? PixelColors.coinGold
-                          : PixelColors.backgroundSurface,
-                      border: Border.all(
-                        color: isSelected
-                            ? PixelColors.borderGold
-                            : PixelColors.borderDark,
+            children:
+                [
+                  'ALL',
+                  'E',
+                  'D',
+                  'C',
+                  'B',
+                  'A',
+                  'S',
+                  'STR',
+                  'INT',
+                  'AGI',
+                  'VIT',
+                  'WIS',
+                ].map((filter) {
+                  final isSelected = filter == _selectedFilter;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: InkWell(
+                      onTap: () => setState(() => _selectedFilter = filter),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? PixelColors.coinGold
+                              : PixelColors.backgroundSurface,
+                          border: Border.all(
+                            color: isSelected
+                                ? PixelColors.borderGold
+                                : PixelColors.borderDark,
+                          ),
+                        ),
+                        child: Text(
+                          filter,
+                          style: PixelTypography.pixelSubheader(
+                            fontSize: 9,
+                            color: isSelected
+                                ? Colors.black
+                                : PixelColors.textBright,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      filter,
-                      style: PixelTypography.pixelSubheader(
-                        fontSize: 9,
-                        color: isSelected
-                            ? Colors.black
-                            : PixelColors.textBright,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
+                  );
+                }).toList(),
           ),
         ),
         const SizedBox(height: 12),
@@ -251,13 +255,14 @@ class _QuestListWidgetState extends State<QuestListWidget> {
             const SizedBox(height: 8),
             Text(
               quest.title,
-              style: PixelTypography.pixelSubheader(
-                fontSize: 11,
+              style: PixelTypography.readableTitle(
+                fontSize: 13,
                 color: isCompleted
                     ? PixelColors.textMuted
                     : PixelColors.textBright,
               ),
             ),
+
             if (quest.description.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(

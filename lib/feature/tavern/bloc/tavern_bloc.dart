@@ -14,9 +14,9 @@ class TavernBloc extends Bloc<TavernEvent, TavernState> {
   TavernBloc({
     required TavernRepository tavernRepository,
     required HeroRepository heroRepository,
-  })  : _tavernRepository = tavernRepository,
-        _heroRepository = heroRepository,
-        super(const TavernInitial()) {
+  }) : _tavernRepository = tavernRepository,
+       _heroRepository = heroRepository,
+       super(const TavernInitial()) {
     on<LoadTavern>(_onLoadTavern);
     on<TavernUpdated>(_onTavernUpdated);
     on<PurchaseItem>(_onPurchaseItem);
@@ -39,7 +39,10 @@ class TavernBloc extends Bloc<TavernEvent, TavernState> {
   List<TavernItem> _cachedCustomRewards = [];
   Hero? _cachedHero;
 
-  Future<void> _onLoadTavern(LoadTavern event, Emitter<TavernState> emit) async {
+  Future<void> _onLoadTavern(
+    LoadTavern event,
+    Emitter<TavernState> emit,
+  ) async {
     emit(const TavernLoading());
     await _cancelSubscriptions();
 
@@ -53,8 +56,9 @@ class TavernBloc extends Bloc<TavernEvent, TavernState> {
       _dispatchUpdated();
     });
 
-    _customRewardsSub =
-        _tavernRepository.watchCustomRewards().listen((customRewards) {
+    _customRewardsSub = _tavernRepository.watchCustomRewards().listen((
+      customRewards,
+    ) {
       _cachedCustomRewards = customRewards;
       _dispatchUpdated();
     });
@@ -67,21 +71,25 @@ class TavernBloc extends Bloc<TavernEvent, TavernState> {
 
   void _dispatchUpdated() {
     if (isClosed) return;
-    add(TavernUpdated(
-      catalog: _cachedCatalog,
-      inventory: _cachedInventory,
-      customRewards: _cachedCustomRewards,
-      hero: _cachedHero,
-    ));
+    add(
+      TavernUpdated(
+        catalog: _cachedCatalog,
+        inventory: _cachedInventory,
+        customRewards: _cachedCustomRewards,
+        hero: _cachedHero,
+      ),
+    );
   }
 
   void _onTavernUpdated(TavernUpdated event, Emitter<TavernState> emit) {
-    emit(TavernLoaded(
-      catalog: event.catalog,
-      inventory: event.inventory,
-      customRewards: event.customRewards,
-      hero: event.hero,
-    ));
+    emit(
+      TavernLoaded(
+        catalog: event.catalog,
+        inventory: event.inventory,
+        customRewards: event.customRewards,
+        hero: event.hero,
+      ),
+    );
   }
 
   Future<void> _onPurchaseItem(
@@ -137,7 +145,9 @@ class TavernBloc extends Bloc<TavernEvent, TavernState> {
     Emitter<TavernState> emit,
   ) async {
     try {
-      final success = await _tavernRepository.redeemCustomReward(event.rewardId);
+      final success = await _tavernRepository.redeemCustomReward(
+        event.rewardId,
+      );
       if (success) {
         SensoryService.instance.playVictory();
       } else {

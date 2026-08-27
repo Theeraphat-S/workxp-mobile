@@ -8,11 +8,7 @@ import 'package:workxp/shared/widgets/pixel_card.dart';
 import 'package:workxp/shared/widgets/pixel_sprite.dart';
 
 class RewardCelebrationDialog extends StatelessWidget {
-  const RewardCelebrationDialog({
-    super.key,
-    this.reward,
-    this.driftReward,
-  });
+  const RewardCelebrationDialog({super.key, this.reward, this.driftReward});
 
   final CustomRewardModel? reward;
   final TavernItem? driftReward;
@@ -22,7 +18,8 @@ class RewardCelebrationDialog extends StatelessWidget {
     final title = reward?.title ?? driftReward?.name ?? 'Reward';
     final description = reward?.description ?? driftReward?.description ?? '';
     final cost = reward?.coinCost ?? driftReward?.cost ?? 50;
-    final timesRedeemed = (reward?.timesRedeemed ?? driftReward?.quantity ?? 0) + 1;
+    final timesRedeemed =
+        (reward?.timesRedeemed ?? driftReward?.quantity ?? 0) + 1;
 
     return Dialog(
       backgroundColor: Colors.transparent,

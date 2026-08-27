@@ -12,40 +12,42 @@ import 'package:workxp/shared/widgets/pixel_sprite.dart';
 
 void main() {
   group('16-Bit Shared Design System Widgets Test', () {
-    testWidgets('PixelButton renders text, icon, and triggers callback on tap', (tester) async {
-      int tapCount = 0;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PixelButton(
-              text: 'STRIKE BOSS',
-              icon: Icons.flash_on,
-              onPressed: () {
-                tapCount++;
-              },
+    testWidgets(
+      'PixelButton renders text, icon, and triggers callback on tap',
+      (tester) async {
+        int tapCount = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: PixelButton(
+                text: 'STRIKE BOSS',
+                icon: Icons.flash_on,
+                onPressed: () {
+                  tapCount++;
+                },
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('STRIKE BOSS'), findsOneWidget);
-      expect(find.byIcon(Icons.flash_on), findsOneWidget);
+        expect(find.text('STRIKE BOSS'), findsOneWidget);
+        expect(find.byIcon(Icons.flash_on), findsOneWidget);
 
-      // Tap button and verify depression & callback
-      await tester.tap(find.text('STRIKE BOSS'));
-      await tester.pumpAndSettle();
-      expect(tapCount, 1);
-    });
+        // Tap button and verify depression & callback
+        await tester.tap(find.text('STRIKE BOSS'));
+        await tester.pumpAndSettle();
+        expect(tapCount, 1);
+      },
+    );
 
-    testWidgets('PixelButton renders disabled style when onPressed is null', (tester) async {
+    testWidgets('PixelButton renders disabled style when onPressed is null', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: PixelButton(
-              text: 'LOCKED ACTION',
-              onPressed: null,
-            ),
+            body: PixelButton(text: 'LOCKED ACTION', onPressed: null),
           ),
         ),
       );
@@ -54,7 +56,9 @@ void main() {
       expect(find.text('LOCKED ACTION'), findsOneWidget);
     });
 
-    testWidgets('PixelCard renders child, borders, and handles onTap', (tester) async {
+    testWidgets('PixelCard renders child, borders, and handles onTap', (
+      tester,
+    ) async {
       int cardTaps = 0;
       await tester.pumpWidget(
         MaterialApp(
@@ -75,49 +79,42 @@ void main() {
       expect(cardTaps, 1);
     });
 
-    testWidgets('PixelProgressBar calculates ratios and clamps boundary values correctly', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                PixelProgressBar(
-                  current: 50,
-                  max: 100,
-                  label: 'HEALTH',
-                ),
-                PixelProgressBar(
-                  current: 0,
-                  max: 100,
-                  label: 'MANA_EMPTY',
-                ),
-                PixelProgressBar(
-                  current: 120,
-                  max: 100,
-                  label: 'OVERFLOW_EXP',
-                ),
-                PixelProgressBar(
-                  current: 10,
-                  max: 0,
-                  label: 'ZERO_MAX',
-                ),
-              ],
+    testWidgets(
+      'PixelProgressBar calculates ratios and clamps boundary values correctly',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  PixelProgressBar(current: 50, max: 100, label: 'HEALTH'),
+                  PixelProgressBar(current: 0, max: 100, label: 'MANA_EMPTY'),
+                  PixelProgressBar(
+                    current: 120,
+                    max: 100,
+                    label: 'OVERFLOW_EXP',
+                  ),
+                  PixelProgressBar(current: 10, max: 0, label: 'ZERO_MAX'),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('HEALTH'), findsOneWidget);
-      expect(find.text('50 / 100'), findsOneWidget);
-      expect(find.text('MANA_EMPTY'), findsOneWidget);
-      expect(find.text('0 / 100'), findsOneWidget);
-      expect(find.text('OVERFLOW_EXP'), findsOneWidget);
-      expect(find.text('120 / 100'), findsOneWidget);
-      expect(find.text('ZERO_MAX'), findsOneWidget);
-    });
+        expect(find.text('HEALTH'), findsOneWidget);
+        expect(find.text('50 / 100'), findsOneWidget);
+        expect(find.text('MANA_EMPTY'), findsOneWidget);
+        expect(find.text('0 / 100'), findsOneWidget);
+        expect(find.text('OVERFLOW_EXP'), findsOneWidget);
+        expect(find.text('120 / 100'), findsOneWidget);
+        expect(find.text('ZERO_MAX'), findsOneWidget);
+      },
+    );
 
-    testWidgets('PixelBadge factory renders all rank and attribute tiers', (tester) async {
+    testWidgets('PixelBadge factory renders all rank and attribute tiers', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -155,58 +152,65 @@ void main() {
       expect(find.text('WIS'), findsOneWidget);
     });
 
-    testWidgets('PixelSprite paints knight, mages, samurais, bosses, and items', (tester) async {
-      const sprites = [
-        'hero_novice',
-        'hero_warrior',
-        'paladin',
-        'dark_knight',
-        'archmage',
-        'cyber_samurai',
-        'boss_slime',
-        'king_slime',
-        'boss_goblin',
-        'goblin_shaman',
-        'boss_necromancer',
-        'shadow_crypt',
-        'boss_dragon',
-        'red_dragon',
-        'potion_health',
-        'potion_mana',
-        'potion_exp',
-        'elixir_life',
-        'coin',
-        'shield',
-        'sword',
-        'trophy',
-      ];
+    testWidgets(
+      'PixelSprite paints knight, mages, samurais, bosses, and items',
+      (tester) async {
+        const sprites = [
+          'hero_novice',
+          'hero_warrior',
+          'paladin',
+          'dark_knight',
+          'archmage',
+          'cyber_samurai',
+          'boss_slime',
+          'king_slime',
+          'boss_goblin',
+          'goblin_shaman',
+          'boss_necromancer',
+          'shadow_crypt',
+          'boss_dragon',
+          'red_dragon',
+          'potion_health',
+          'potion_mana',
+          'potion_exp',
+          'elixir_life',
+          'coin',
+          'shield',
+          'sword',
+          'trophy',
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                children: sprites
-                    .map((s) => PixelSprite(spriteType: s, isGhost: s == 'hero_novice'))
-                    .toList(),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: sprites
+                      .map(
+                        (s) => PixelSprite(
+                          spriteType: s,
+                          isGhost: s == 'hero_novice',
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(PixelSprite), findsNWidgets(sprites.length));
-    });
+        expect(find.byType(PixelSprite), findsNWidgets(sprites.length));
+      },
+    );
 
-    testWidgets('CrtScanlineOverlay wraps child with scanline effects', (tester) async {
+    testWidgets('CrtScanlineOverlay wraps child with scanline effects', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: CrtScanlineOverlay(
-              enabled: true,
-              child: Text('CRT Content'),
-            ),
+            body: CrtScanlineOverlay(enabled: true, child: Text('CRT Content')),
           ),
         ),
       );

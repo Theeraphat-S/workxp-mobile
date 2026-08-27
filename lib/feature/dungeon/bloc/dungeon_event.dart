@@ -13,10 +13,7 @@ class LoadDungeon extends DungeonEvent {
 }
 
 class DungeonUpdated extends DungeonEvent {
-  const DungeonUpdated({
-    required this.bosses,
-    required this.activeBoss,
-  });
+  const DungeonUpdated({required this.bosses, required this.activeBoss});
 
   final List<Boss> bosses;
   final Boss? activeBoss;

@@ -31,32 +31,24 @@ class BossBloc extends Bloc<BossEvent, BossState> {
 
     _activeBossSub = _bossRepository.watchActiveBoss().listen((boss) {
       _cachedActiveBoss = boss;
-      add(BossUpdated(
-        activeBoss: _cachedActiveBoss,
-        allBosses: _cachedAllBosses,
-      ));
+      add(
+        BossUpdated(activeBoss: _cachedActiveBoss, allBosses: _cachedAllBosses),
+      );
     });
 
     _allBossesSub = _bossRepository.watchAllBosses().listen((all) {
       _cachedAllBosses = all;
-      add(BossUpdated(
-        activeBoss: _cachedActiveBoss,
-        allBosses: _cachedAllBosses,
-      ));
+      add(
+        BossUpdated(activeBoss: _cachedActiveBoss, allBosses: _cachedAllBosses),
+      );
     });
   }
 
   void _onBossUpdated(BossUpdated event, Emitter<BossState> emit) {
-    emit(BossLoaded(
-      activeBoss: event.activeBoss,
-      allBosses: event.allBosses,
-    ));
+    emit(BossLoaded(activeBoss: event.activeBoss, allBosses: event.allBosses));
   }
 
-  Future<void> _onDamageBoss(
-    DamageBoss event,
-    Emitter<BossState> emit,
-  ) async {
+  Future<void> _onDamageBoss(DamageBoss event, Emitter<BossState> emit) async {
     try {
       await _bossRepository.applyDamage(event.damage);
     } catch (e) {

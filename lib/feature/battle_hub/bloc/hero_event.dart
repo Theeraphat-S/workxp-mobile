@@ -21,12 +21,7 @@ class HeroUpdated extends HeroEvent {
 }
 
 class AllocateAttributes extends HeroEvent {
-  const AllocateAttributes({
-    this.str,
-    this.agi,
-    this.intAttr,
-    this.vit,
-  });
+  const AllocateAttributes({this.str, this.agi, this.intAttr, this.vit});
 
   final int? str;
   final int? agi;
@@ -58,10 +53,7 @@ class EquipTitle extends HeroEvent {
 }
 
 class AwardExpAndCoins extends HeroEvent {
-  const AwardExpAndCoins({
-    required this.exp,
-    required this.coins,
-  });
+  const AwardExpAndCoins({required this.exp, required this.coins});
 
   final int exp;
   final int coins;

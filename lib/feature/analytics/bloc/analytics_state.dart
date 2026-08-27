@@ -44,15 +44,15 @@ class AnalyticsLoaded extends AnalyticsState {
 
   @override
   List<Object?> get props => [
-        combatLogs,
-        hero,
-        heroModel,
-        dailies,
-        habits,
-        dailyLogs,
-        achievements,
-        leaderboard,
-      ];
+    combatLogs,
+    hero,
+    heroModel,
+    dailies,
+    habits,
+    dailyLogs,
+    achievements,
+    leaderboard,
+  ];
 }
 
 class AnalyticsError extends AnalyticsState {

@@ -34,8 +34,9 @@ class TavernLoaded extends TavernState {
   List<TavernItem> get consumables =>
       catalog.where((i) => i.category == 'consumable').toList();
 
-  List<TavernItem> get cosmetics =>
-      catalog.where((i) => i.category == 'skin' || i.category == 'theme').toList();
+  List<TavernItem> get cosmetics => catalog
+      .where((i) => i.category == 'skin' || i.category == 'theme')
+      .toList();
 
   @override
   List<Object?> get props => [catalog, inventory, customRewards, hero];

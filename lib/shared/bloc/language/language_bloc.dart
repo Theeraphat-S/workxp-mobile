@@ -10,7 +10,7 @@ export 'language_state.dart';
 /// BLoC managing application language switching and local persistence.
 class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
   LanguageBloc(this._hiveConfig)
-      : super(LanguageState(Locale(_hiveConfig.locale))) {
+    : super(LanguageState(Locale(_hiveConfig.locale))) {
     on<LoadLanguage>(_onLoadLanguage);
     on<ChangeLanguage>(_onChangeLanguage);
   }
@@ -22,10 +22,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     emit(LanguageState(Locale(savedCode)));
   }
 
-  void _onChangeLanguage(
-    ChangeLanguage event,
-    Emitter<LanguageState> emit,
-  ) {
+  void _onChangeLanguage(ChangeLanguage event, Emitter<LanguageState> emit) {
     emit(LanguageState(event.locale));
     _hiveConfig.setLocale(event.locale.languageCode);
   }

@@ -85,11 +85,44 @@ class PixelTypography {
     FontWeight fontWeight = FontWeight.normal,
     double height = 1.3,
   }) {
-    return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: fontWeight,
-      height: height,
-    );
+    try {
+      return GoogleFonts.prompt(
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+        height: height,
+      );
+    } catch (_) {
+      return TextStyle(
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+        height: height,
+      );
+    }
+  }
+
+  /// Clean readable sans-serif header for Quest titles in both Thai and English
+  static TextStyle readableTitle({
+    double fontSize = 14,
+    Color color = PixelColors.textBright,
+    FontWeight fontWeight = FontWeight.w600,
+    double height = 1.2,
+  }) {
+    try {
+      return GoogleFonts.prompt(
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+        height: height,
+      );
+    } catch (_) {
+      return TextStyle(
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+        height: height,
+      );
+    }
   }
 }

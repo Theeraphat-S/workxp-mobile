@@ -42,16 +42,18 @@ class HabitTabView extends StatelessWidget {
   List<HabitModel> get _combinedHabits {
     if (habits.isNotEmpty) return habits;
     return driftHabits
-        .map((h) => HabitModel(
-              id: h.id,
-              title: h.title,
-              hasPositive: h.isPositive,
-              hasNegative: h.isNegative,
-              positiveCountToday: h.positiveCount,
-              negativeCountToday: h.negativeCount,
-              totalPositiveCount: h.positiveCount,
-              totalNegativeCount: h.negativeCount,
-            ))
+        .map(
+          (h) => HabitModel(
+            id: h.id,
+            title: h.title,
+            hasPositive: h.isPositive,
+            hasNegative: h.isNegative,
+            positiveCountToday: h.positiveCount,
+            negativeCountToday: h.negativeCount,
+            totalPositiveCount: h.positiveCount,
+            totalNegativeCount: h.negativeCount,
+          ),
+        )
         .toList();
   }
 
@@ -126,11 +128,12 @@ class HabitTabView extends StatelessWidget {
                 children: [
                   Text(
                     habit.title,
-                    style: PixelTypography.pixelSubheader(
-                      fontSize: 11,
+                    style: PixelTypography.readableTitle(
+                      fontSize: 13,
                       color: PixelColors.textBright,
                     ),
                   ),
+
                   const SizedBox(height: 4),
                   Row(
                     children: [
@@ -156,7 +159,10 @@ class HabitTabView extends StatelessWidget {
                 fontSize: 12,
                 backgroundColor: PixelColors.hpGreen,
                 textColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 onPressed: () => onLogPositive(habit.id),
               ),
               const SizedBox(width: 6),
@@ -169,7 +175,10 @@ class HabitTabView extends StatelessWidget {
                 fontSize: 12,
                 backgroundColor: PixelColors.hpRed,
                 textColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 onPressed: () => onLogNegative(habit.id),
               ),
               const SizedBox(width: 6),

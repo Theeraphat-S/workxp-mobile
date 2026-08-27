@@ -38,8 +38,8 @@ class DamageBarChartCard extends StatelessWidget {
     final maxVal = recentLogs.isEmpty
         ? 100.0
         : recentLogs
-            .map((l) => l.damageDealt.toDouble())
-            .reduce((a, b) => a > b ? a : b);
+              .map((l) => l.damageDealt.toDouble())
+              .reduce((a, b) => a > b ? a : b);
 
     return PixelCard(
       borderColor: PixelColors.bossHealth,

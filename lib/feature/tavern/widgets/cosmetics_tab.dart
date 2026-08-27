@@ -27,20 +27,23 @@ class CosmeticsTab extends StatelessWidget {
   final void Function(String skinId) onEquip;
 
   int get heroCoins => hero?.coins ?? heroModel?.coins ?? 0;
-  String get activeSkinId => hero?.avatarSkinId ?? heroModel?.activeSkinId ?? 'hero_novice';
+  String get activeSkinId =>
+      hero?.avatarSkinId ?? heroModel?.activeSkinId ?? 'hero_novice';
 
   List<TavernItemModel> get _combinedItems {
     if (items.isNotEmpty) return items;
     return driftItems
-        .map((item) => TavernItemModel(
-              id: item.id,
-              name: item.name,
-              description: item.description,
-              cost: item.cost,
-              type: item.category,
-              spriteType: item.iconAsset,
-              effectValue: item.effectValue,
-            ))
+        .map(
+          (item) => TavernItemModel(
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            cost: item.cost,
+            type: item.category,
+            spriteType: item.iconAsset,
+            effectValue: item.effectValue,
+          ),
+        )
         .toList();
   }
 

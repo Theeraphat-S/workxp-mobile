@@ -56,10 +56,7 @@ class HeroBloc extends Bloc<HeroEvent, HeroState> {
     }
   }
 
-  Future<void> _onReviveHero(
-    ReviveHero event,
-    Emitter<HeroState> emit,
-  ) async {
+  Future<void> _onReviveHero(ReviveHero event, Emitter<HeroState> emit) async {
     try {
       await _heroRepository.setGhostState(false);
     } catch (e) {
@@ -67,10 +64,7 @@ class HeroBloc extends Bloc<HeroEvent, HeroState> {
     }
   }
 
-  Future<void> _onEquipSkin(
-    EquipSkin event,
-    Emitter<HeroState> emit,
-  ) async {
+  Future<void> _onEquipSkin(EquipSkin event, Emitter<HeroState> emit) async {
     try {
       await _heroRepository.equipSkin(event.skinId);
     } catch (e) {
@@ -78,10 +72,7 @@ class HeroBloc extends Bloc<HeroEvent, HeroState> {
     }
   }
 
-  Future<void> _onEquipTitle(
-    EquipTitle event,
-    Emitter<HeroState> emit,
-  ) async {
+  Future<void> _onEquipTitle(EquipTitle event, Emitter<HeroState> emit) async {
     try {
       await _heroRepository.equipTitle(event.title);
     } catch (e) {
@@ -112,10 +103,7 @@ class HeroBloc extends Bloc<HeroEvent, HeroState> {
     }
   }
 
-  Future<void> _onSpendMp(
-    SpendMp event,
-    Emitter<HeroState> emit,
-  ) async {
+  Future<void> _onSpendMp(SpendMp event, Emitter<HeroState> emit) async {
     try {
       await _heroRepository.spendMp(event.mpAmount);
     } catch (e) {

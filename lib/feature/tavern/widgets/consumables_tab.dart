@@ -29,15 +29,17 @@ class ConsumablesTab extends StatelessWidget {
   List<TavernItemModel> get _combinedItems {
     if (items.isNotEmpty) return items;
     return driftItems
-        .map((item) => TavernItemModel(
-              id: item.id,
-              name: item.name,
-              description: item.description,
-              cost: item.cost,
-              type: item.category,
-              spriteType: item.iconAsset,
-              effectValue: item.effectValue,
-            ))
+        .map(
+          (item) => TavernItemModel(
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            cost: item.cost,
+            type: item.category,
+            spriteType: item.iconAsset,
+            effectValue: item.effectValue,
+          ),
+        )
         .toList();
   }
 

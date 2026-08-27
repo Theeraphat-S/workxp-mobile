@@ -16,10 +16,10 @@ class DailyQuestBloc extends Bloc<DailyQuestEvent, DailyQuestState> {
     required DailyQuestRepository dailyQuestRepository,
     required HeroRepository heroRepository,
     required CombatLogRepository combatLogRepository,
-  })  : _dailyQuestRepository = dailyQuestRepository,
-        _heroRepository = heroRepository,
-        _combatLogRepository = combatLogRepository,
-        super(const DailyQuestInitial()) {
+  }) : _dailyQuestRepository = dailyQuestRepository,
+       _heroRepository = heroRepository,
+       _combatLogRepository = combatLogRepository,
+       super(const DailyQuestInitial()) {
     on<LoadDailyQuests>(_onLoadDailyQuests);
     on<DailyQuestsUpdated>(_onDailyQuestsUpdated);
     on<ToggleDailyQuest>(_onToggleDailyQuest);
@@ -41,8 +41,9 @@ class DailyQuestBloc extends Bloc<DailyQuestEvent, DailyQuestState> {
   ) async {
     emit(const DailyQuestLoading());
     await _dailiesSubscription?.cancel();
-    _dailiesSubscription =
-        _dailyQuestRepository.watchDailyQuests().listen((dailies) {
+    _dailiesSubscription = _dailyQuestRepository.watchDailyQuests().listen((
+      dailies,
+    ) {
       add(DailyQuestsUpdated(dailies));
     });
   }
@@ -61,7 +62,9 @@ class DailyQuestBloc extends Bloc<DailyQuestEvent, DailyQuestState> {
   ) async {
     try {
       final hero = await _heroRepository.watchHero().first;
-      final updatedDaily = await _dailyQuestRepository.toggleDailyQuest(event.id);
+      final updatedDaily = await _dailyQuestRepository.toggleDailyQuest(
+        event.id,
+      );
       final isNowCompleted = updatedDaily?.isCompleted ?? false;
       final target = _cachedDailies.where((d) => d.id == event.id).firstOrNull;
 
@@ -78,7 +81,9 @@ class DailyQuestBloc extends Bloc<DailyQuestEvent, DailyQuestState> {
         );
 
         // Check if all dailies completed today for all-done bonus chest (+25 coins)
-        final allDone = _cachedDailies.every((d) => d.id == event.id ? true : d.isCompleted);
+        final allDone = _cachedDailies.every(
+          (d) => d.id == event.id ? true : d.isCompleted,
+        );
         if (allDone && _cachedDailies.isNotEmpty && hero?.isGhost != true) {
           await _heroRepository.awardExp(50);
           await _heroRepository.gainCoins(25);
@@ -132,8 +137,7 @@ class DailyQuestBloc extends Bloc<DailyQuestEvent, DailyQuestState> {
     Emitter<DailyQuestState> emit,
   ) async {
     try {
-      final missedCount =
-          await _dailyQuestRepository.processMidnightReset();
+      final missedCount = await _dailyQuestRepository.processMidnightReset();
       if (missedCount > 0) {
         final penaltyDamage = missedCount * 15;
         await _heroRepository.takeDamage(penaltyDamage);

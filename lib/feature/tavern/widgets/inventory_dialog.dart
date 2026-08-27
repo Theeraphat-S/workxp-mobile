@@ -25,13 +25,15 @@ class InventoryDialog extends StatelessWidget {
     if (inventory.isNotEmpty) return inventory;
     return driftInventory
         .where((i) => i.quantity > 0)
-        .map((i) => InventoryItemModel(
-              tavernItemId: i.id,
-              name: i.name,
-              description: i.description,
-              quantity: i.quantity,
-              spriteType: i.iconAsset,
-            ))
+        .map(
+          (i) => InventoryItemModel(
+            tavernItemId: i.id,
+            name: i.name,
+            description: i.description,
+            quantity: i.quantity,
+            spriteType: i.iconAsset,
+          ),
+        )
         .toList();
   }
 

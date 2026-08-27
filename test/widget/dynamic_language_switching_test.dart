@@ -43,7 +43,9 @@ void main() {
 
       languageBloc.add(const ChangeLanguage(Locale('th')));
       await tester.runAsync(
-        () async => languageBloc.stream.firstWhere((s) => s.locale.languageCode == 'th'),
+        () async => languageBloc.stream.firstWhere(
+          (s) => s.locale.languageCode == 'th',
+        ),
       );
       await tester.pumpAndSettle();
       expect(find.text('LANG: th'), findsOneWidget);
@@ -52,12 +54,11 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('Language switches dynamically between English and Thai', (tester) async {
+    testWidgets('Language switches dynamically between English and Thai', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        WorkXpApp(
-          appRouter: appRouter,
-          languageBloc: languageBloc,
-        ),
+        WorkXpApp(appRouter: appRouter, languageBloc: languageBloc),
       );
       await tester.pumpAndSettle();
 

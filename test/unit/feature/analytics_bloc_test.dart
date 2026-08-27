@@ -30,10 +30,7 @@ void main() {
       text: 'Struck King Slime for 120 damage!',
       damage: 120,
     );
-    await logRepo.addLog(
-      text: 'Completed Quest for 250 damage!',
-      damage: 250,
-    );
+    await logRepo.addLog(text: 'Completed Quest for 250 damage!', damage: 250);
   });
 
   tearDown(() async {
@@ -41,37 +38,43 @@ void main() {
   });
 
   group('Analytics Feature Slice BLoC Unit Tests', () {
-    test('1. Loads 30-day activity logs, unlocks dynamic achievements, and ranks guild leaderboard', () async {
-      final bloc = AnalyticsBloc(
-        combatLogRepository: logRepo,
-        heroRepository: heroRepo,
-        dailyQuestRepository: dailyRepo,
-        habitRepository: habitRepo,
-      );
-      bloc.add(const LoadAnalytics());
+    test(
+      '1. Loads 30-day activity logs, unlocks dynamic achievements, and ranks guild leaderboard',
+      () async {
+        final bloc = AnalyticsBloc(
+          combatLogRepository: logRepo,
+          heroRepository: heroRepo,
+          dailyQuestRepository: dailyRepo,
+          habitRepository: habitRepo,
+        );
+        bloc.add(const LoadAnalytics());
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<AnalyticsLoaded>().having(
-          (s) => s.combatLogs.length,
-          'logCount',
-          2,
-        )),
-      );
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<AnalyticsLoaded>().having(
+              (s) => s.combatLogs.length,
+              'logCount',
+              2,
+            ),
+          ),
+        );
 
-      final state = bloc.state as AnalyticsLoaded;
-      expect(state.dailyLogs.length, 30);
-      expect(state.achievements.isNotEmpty, true);
+        final state = bloc.state as AnalyticsLoaded;
+        expect(state.dailyLogs.length, 30);
+        expect(state.achievements.isNotEmpty, true);
 
-      // Verify First Blood achievement unlocked because damage was dealt
-      final firstBlood =
-          state.achievements.firstWhere((a) => a.id == 'ach_first_blood');
-      expect(firstBlood.isUnlocked, true);
+        // Verify First Blood achievement unlocked because damage was dealt
+        final firstBlood = state.achievements.firstWhere(
+          (a) => a.id == 'ach_first_blood',
+        );
+        expect(firstBlood.isUnlocked, true);
 
-      // Verify leaderboard contains hero entry
-      expect(state.leaderboard.any((e) => e.isHero), true);
+        // Verify leaderboard contains hero entry
+        expect(state.leaderboard.any((e) => e.isHero), true);
 
-      await bloc.close();
-    });
+        await bloc.close();
+      },
+    );
   });
 }

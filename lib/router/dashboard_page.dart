@@ -32,10 +32,7 @@ class DashboardPage extends StatelessWidget {
             decoration: const BoxDecoration(
               color: PixelColors.backgroundDark,
               border: Border(
-                top: BorderSide(
-                  color: PixelColors.borderHighlight,
-                  width: 2.0,
-                ),
+                top: BorderSide(color: PixelColors.borderHighlight, width: 2.0),
               ),
               boxShadow: [
                 BoxShadow(
@@ -143,10 +140,7 @@ class DashboardPage extends StatelessWidget {
               navLabel.toUpperCase(),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: PixelTypography.pixelSubheader(
-                fontSize: 8,
-                color: color,
-              ),
+              style: PixelTypography.pixelSubheader(fontSize: 8, color: color),
             ),
           ],
         ),

@@ -17,10 +17,7 @@ class BossLoading extends BossState {
 }
 
 class BossLoaded extends BossState {
-  const BossLoaded({
-    required this.activeBoss,
-    required this.allBosses,
-  });
+  const BossLoaded({required this.activeBoss, required this.allBosses});
 
   final Boss? activeBoss;
   final List<Boss> allBosses;

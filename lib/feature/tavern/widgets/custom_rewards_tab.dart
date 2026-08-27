@@ -37,14 +37,16 @@ class CustomRewardsTab extends StatelessWidget {
   List<CustomRewardModel> get _combinedRewards {
     if (rewards.isNotEmpty) return rewards;
     return driftRewards
-        .map((r) => CustomRewardModel(
-              id: r.id,
-              title: r.name,
-              description: r.description,
-              coinCost: r.cost,
-              iconName: r.iconAsset,
-              timesRedeemed: r.quantity,
-            ))
+        .map(
+          (r) => CustomRewardModel(
+            id: r.id,
+            title: r.name,
+            description: r.description,
+            coinCost: r.cost,
+            iconName: r.iconAsset,
+            timesRedeemed: r.quantity,
+          ),
+        )
         .toList();
   }
 

@@ -8,33 +8,17 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(
-          path: '/',
-          page: DashboardRoute.page,
-          initial: true,
-          children: [
-            AutoRoute(
-              path: 'battle',
-              page: BattleHubRoute.page,
-              initial: true,
-            ),
-            AutoRoute(
-              path: 'dungeon',
-              page: DungeonMapRoute.page,
-            ),
-            AutoRoute(
-              path: 'tavern',
-              page: TavernRoute.page,
-            ),
-            AutoRoute(
-              path: 'analytics',
-              page: AnalyticsRoute.page,
-            ),
-            AutoRoute(
-              path: 'sanctuary',
-              page: HeroSanctuaryRoute.page,
-            ),
-          ],
-        ),
-      ];
+    AutoRoute(
+      path: '/',
+      page: DashboardRoute.page,
+      initial: true,
+      children: [
+        AutoRoute(path: 'battle', page: BattleHubRoute.page, initial: true),
+        AutoRoute(path: 'dungeon', page: DungeonMapRoute.page),
+        AutoRoute(path: 'tavern', page: TavernRoute.page),
+        AutoRoute(path: 'analytics', page: AnalyticsRoute.page),
+        AutoRoute(path: 'sanctuary', page: HeroSanctuaryRoute.page),
+      ],
+    ),
+  ];
 }

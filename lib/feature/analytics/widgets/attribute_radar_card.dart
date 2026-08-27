@@ -7,11 +7,7 @@ import 'package:workxp/shared/theme/pixel_typography.dart';
 import 'package:workxp/shared/widgets/pixel_card.dart';
 
 class AttributeRadarCard extends StatelessWidget {
-  const AttributeRadarCard({
-    super.key,
-    this.heroModel,
-    this.hero,
-  });
+  const AttributeRadarCard({super.key, this.heroModel, this.hero});
 
   final HeroModel? heroModel;
   final Hero? hero;

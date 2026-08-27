@@ -41,14 +41,14 @@ class CreateQuest extends QuestEvent {
 
   @override
   List<Object?> get props => [
-        title,
-        description,
-        rank,
-        baseDamage,
-        expReward,
-        coinReward,
-        id,
-      ];
+    title,
+    description,
+    rank,
+    baseDamage,
+    expReward,
+    coinReward,
+    id,
+  ];
 }
 
 class CompleteQuest extends QuestEvent {

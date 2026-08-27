@@ -8,11 +8,7 @@ import 'package:workxp/shared/widgets/pixel_progress_bar.dart';
 import 'package:workxp/shared/widgets/pixel_sprite.dart';
 
 class HeroCardWidget extends StatelessWidget {
-  const HeroCardWidget({
-    super.key,
-    this.heroModel,
-    this.hero,
-  });
+  const HeroCardWidget({super.key, this.heroModel, this.hero});
 
   final HeroModel? heroModel;
   final Hero? hero;
@@ -46,9 +42,7 @@ class HeroCardWidget extends StatelessWidget {
     final expTarget = HeroModel.expTargetForLevel(h.level);
 
     return PixelCard(
-      borderColor: h.isGhost
-          ? PixelColors.ghostSpirit
-          : PixelColors.coinGold,
+      borderColor: h.isGhost ? PixelColors.ghostSpirit : PixelColors.coinGold,
       backgroundColor: PixelColors.backgroundCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

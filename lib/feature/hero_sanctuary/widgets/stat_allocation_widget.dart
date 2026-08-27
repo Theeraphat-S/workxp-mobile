@@ -59,8 +59,8 @@ class StatAllocationWidget extends StatelessWidget {
                       : PixelColors.backgroundSurface,
                   border: Border.all(
                     color: h.unallocatedPoints > 0
-                      ? PixelColors.attrWis
-                      : PixelColors.borderHighlight,
+                        ? PixelColors.attrWis
+                        : PixelColors.borderHighlight,
                   ),
                 ),
                 child: Text(

@@ -36,11 +36,13 @@ void main() {
 
       await expectLater(
         bloc.stream,
-        emitsThrough(isA<TavernLoaded>().having(
-          (s) => s.catalog.isNotEmpty,
-          'hasCatalog',
-          true,
-        )),
+        emitsThrough(
+          isA<TavernLoaded>().having(
+            (s) => s.catalog.isNotEmpty,
+            'hasCatalog',
+            true,
+          ),
+        ),
       );
 
       // Hero takes damage
@@ -52,19 +54,20 @@ void main() {
       bloc.add(const PurchaseItem('item_potion_health'));
       await expectLater(
         bloc.stream,
-        emitsThrough(isA<TavernLoaded>().having(
-          (s) => s.inventory.any((i) => i.id == 'item_potion_health' && i.quantity > 0),
-          'inInventory',
-          true,
-        )),
+        emitsThrough(
+          isA<TavernLoaded>().having(
+            (s) => s.inventory.any(
+              (i) => i.id == 'item_potion_health' && i.quantity > 0,
+            ),
+            'inInventory',
+            true,
+          ),
+        ),
       );
 
       // Use Health Potion
       bloc.add(const UseConsumableItem('item_potion_health'));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<TavernLoaded>()),
-      );
+      await expectLater(bloc.stream, emitsThrough(isA<TavernLoaded>()));
 
       hero = await heroRepo.getHero();
       expect(hero?.hp, greaterThan(60));
@@ -72,49 +75,50 @@ void main() {
       await bloc.close();
     });
 
-    test('2. Creates custom real-life reward and redeems it with coins', () async {
-      final bloc = TavernBloc(
-        tavernRepository: tavernRepo,
-        heroRepository: heroRepo,
-      );
-      bloc.add(const LoadTavern());
+    test(
+      '2. Creates custom real-life reward and redeems it with coins',
+      () async {
+        final bloc = TavernBloc(
+          tavernRepository: tavernRepo,
+          heroRepository: heroRepo,
+        );
+        bloc.add(const LoadTavern());
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<TavernLoaded>()),
-      );
+        await expectLater(bloc.stream, emitsThrough(isA<TavernLoaded>()));
 
-      // Create custom reward
-      bloc.add(const CreateCustomRewardEvent(
-        name: '30 Mins Gaming',
-        description: 'Take a guilt-free break',
-        cost: 50,
-      ));
+        // Create custom reward
+        bloc.add(
+          const CreateCustomRewardEvent(
+            name: '30 Mins Gaming',
+            description: 'Take a guilt-free break',
+            cost: 50,
+          ),
+        );
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<TavernLoaded>().having(
-          (s) => s.customRewards.any((r) => r.name == '30 Mins Gaming'),
-          'rewardCreated',
-          true,
-        )),
-      );
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<TavernLoaded>().having(
+              (s) => s.customRewards.any((r) => r.name == '30 Mins Gaming'),
+              'rewardCreated',
+              true,
+            ),
+          ),
+        );
 
-      final reward = (bloc.state as TavernLoaded)
-          .customRewards
-          .firstWhere((r) => r.name == '30 Mins Gaming');
+        final reward = (bloc.state as TavernLoaded).customRewards.firstWhere(
+          (r) => r.name == '30 Mins Gaming',
+        );
 
-      // Redeem custom reward
-      bloc.add(RedeemCustomRewardEvent(reward.id));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<TavernLoaded>()),
-      );
+        // Redeem custom reward
+        bloc.add(RedeemCustomRewardEvent(reward.id));
+        await expectLater(bloc.stream, emitsThrough(isA<TavernLoaded>()));
 
-      final updatedHero = await heroRepo.getHero();
-      expect(updatedHero?.coins, lessThan(200));
+        final updatedHero = await heroRepo.getHero();
+        expect(updatedHero?.coins, lessThan(200));
 
-      await bloc.close();
-    });
+        await bloc.close();
+      },
+    );
   });
 }

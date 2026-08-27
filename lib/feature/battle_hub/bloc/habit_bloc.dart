@@ -16,10 +16,10 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     required HabitRepository habitRepository,
     required HeroRepository heroRepository,
     required CombatLogRepository combatLogRepository,
-  })  : _habitRepository = habitRepository,
-        _heroRepository = heroRepository,
-        _combatLogRepository = combatLogRepository,
-        super(const HabitInitial()) {
+  }) : _habitRepository = habitRepository,
+       _heroRepository = heroRepository,
+       _combatLogRepository = combatLogRepository,
+       super(const HabitInitial()) {
     on<LoadHabits>(_onLoadHabits);
     on<HabitsUpdated>(_onHabitsUpdated);
     on<LogHabit>(_onLogHabit);
@@ -34,10 +34,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
   StreamSubscription<List<Habit>>? _habitsSubscription;
   List<Habit> _cachedHabits = [];
 
-  Future<void> _onLoadHabits(
-    LoadHabits event,
-    Emitter<HabitState> emit,
-  ) async {
+  Future<void> _onLoadHabits(LoadHabits event, Emitter<HabitState> emit) async {
     emit(const HabitLoading());
     await _habitsSubscription?.cancel();
     _habitsSubscription = _habitRepository.watchHabits().listen((habits) {
@@ -50,16 +47,10 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     emit(HabitLoaded(_cachedHabits));
   }
 
-  Future<void> _onLogHabit(
-    LogHabit event,
-    Emitter<HabitState> emit,
-  ) async {
+  Future<void> _onLogHabit(LogHabit event, Emitter<HabitState> emit) async {
     try {
       final hero = await _heroRepository.watchHero().first;
-      await _habitRepository.logHabit(
-        event.id,
-        event.isPositive,
-      );
+      await _habitRepository.logHabit(event.id, event.isPositive);
 
       final target = _cachedHabits.where((h) => h.id == event.id).firstOrNull;
       final habitTitle = target?.title ?? 'Habit';
@@ -72,8 +63,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
         }
         await _combatLogRepository.addLog(
           damage: 0,
-          text:
-              'Positive habit "$habitTitle" logged! +15 EXP, +10 Coins.',
+          text: 'Positive habit "$habitTitle" logged! +15 EXP, +10 Coins.',
         );
         SensoryService.instance.playCoin();
       } else {

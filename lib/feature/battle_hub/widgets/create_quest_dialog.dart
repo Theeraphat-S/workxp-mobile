@@ -159,8 +159,8 @@ class _CreateQuestDialogState extends State<CreateQuestDialog> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                          ? PixelBadge.colorForRank(rank).withAlpha(50)
-                          : PixelColors.backgroundSurface,
+                            ? PixelBadge.colorForRank(rank).withAlpha(50)
+                            : PixelColors.backgroundSurface,
                         border: Border.all(
                           color: isSelected
                               ? PixelBadge.colorForRank(rank)

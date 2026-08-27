@@ -34,7 +34,8 @@ class SanctuaryLoaded extends SanctuaryState {
   final String? exportedBackupJson;
   final String? backupStatusMessage;
 
-  int get unallocatedPoints => hero?.unspentStatPoints ?? heroModel.unallocatedPoints;
+  int get unallocatedPoints =>
+      hero?.unspentStatPoints ?? heroModel.unallocatedPoints;
 
   SanctuaryLoaded copyWith({
     Hero? hero,
@@ -56,13 +57,13 @@ class SanctuaryLoaded extends SanctuaryState {
 
   @override
   List<Object?> get props => [
-        hero,
-        heroModel,
-        sfxEnabled,
-        hapticsEnabled,
-        exportedBackupJson,
-        backupStatusMessage,
-      ];
+    hero,
+    heroModel,
+    sfxEnabled,
+    hapticsEnabled,
+    exportedBackupJson,
+    backupStatusMessage,
+  ];
 }
 
 class SanctuaryError extends SanctuaryState {

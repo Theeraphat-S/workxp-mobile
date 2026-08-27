@@ -21,11 +21,7 @@ void main() async {
 }
 
 class WorkXpApp extends StatefulWidget {
-  const WorkXpApp({
-    super.key,
-    this.appRouter,
-    this.languageBloc,
-  });
+  const WorkXpApp({super.key, this.appRouter, this.languageBloc});
 
   final AppRouter? appRouter;
   final LanguageBloc? languageBloc;
@@ -41,12 +37,14 @@ class _WorkXpAppState extends State<WorkXpApp> {
   @override
   void initState() {
     super.initState();
-    _router = widget.appRouter ??
+    _router =
+        widget.appRouter ??
         (locator.isRegistered<AppRouter>()
             ? locator<AppRouter>()
             : AppRouter());
 
-    _languageBloc = widget.languageBloc ??
+    _languageBloc =
+        widget.languageBloc ??
         (locator.isRegistered<LanguageBloc>()
             ? locator<LanguageBloc>()
             : LanguageBloc(HiveConfig()));

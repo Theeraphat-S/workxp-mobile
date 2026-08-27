@@ -21,91 +21,93 @@ void main() {
   });
 
   group('Hero Sanctuary Feature Slice BLoC Unit Tests', () {
-    test('1. Loads hero profile, allocates stat points, equips skins and titles', () async {
-      final bloc = SanctuaryBloc(
-        heroRepository: heroRepo,
-        appDatabase: db,
-      );
-      bloc.add(const LoadSanctuary());
+    test(
+      '1. Loads hero profile, allocates stat points, equips skins and titles',
+      () async {
+        final bloc = SanctuaryBloc(heroRepository: heroRepo, appDatabase: db);
+        bloc.add(const LoadSanctuary());
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => s.hero?.name,
-          'heroName',
-          'Arthur',
-        )),
-      );
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<SanctuaryLoaded>().having(
+              (s) => s.hero?.name,
+              'heroName',
+              'Arthur',
+            ),
+          ),
+        );
 
-      // Award EXP so hero levels up and gets 3 unspent stat points
-      await heroRepo.awardExp(120);
+        // Award EXP so hero levels up and gets 3 unspent stat points
+        await heroRepo.awardExp(120);
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => (s.hero?.unspentStatPoints ?? 0) > 0,
-          'hasStatPoints',
-          true,
-        )),
-      );
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<SanctuaryLoaded>().having(
+              (s) => (s.hero?.unspentStatPoints ?? 0) > 0,
+              'hasStatPoints',
+              true,
+            ),
+          ),
+        );
 
-      // Allocate STR point
-      bloc.add(const AllocateStatPoint('STR'));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => s.hero?.str,
-          'str',
-          6,
-        )),
-      );
+        // Allocate STR point
+        bloc.add(const AllocateStatPoint('STR'));
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<SanctuaryLoaded>().having((s) => s.hero?.str, 'str', 6),
+          ),
+        );
 
-      // Equip skin
-      bloc.add(const EquipSkinEvent('paladin'));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => s.hero?.avatarSkinId,
-          'skin',
-          'paladin',
-        )),
-      );
+        // Equip skin
+        bloc.add(const EquipSkinEvent('paladin'));
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<SanctuaryLoaded>().having(
+              (s) => s.hero?.avatarSkinId,
+              'skin',
+              'paladin',
+            ),
+          ),
+        );
 
-      // Equip title
-      bloc.add(const EquipTitleEvent('Dragon Champion'));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => s.hero?.activeTitle,
-          'title',
-          'Dragon Champion',
-        )),
-      );
+        // Equip title
+        bloc.add(const EquipTitleEvent('Dragon Champion'));
+        await expectLater(
+          bloc.stream,
+          emitsThrough(
+            isA<SanctuaryLoaded>().having(
+              (s) => s.hero?.activeTitle,
+              'title',
+              'Dragon Champion',
+            ),
+          ),
+        );
 
-      await bloc.close();
-    });
+        await bloc.close();
+      },
+    );
 
     test('2. Exports complete game state to formatted JSON backup', () async {
-      final bloc = SanctuaryBloc(
-        heroRepository: heroRepo,
-        appDatabase: db,
-      );
+      final bloc = SanctuaryBloc(heroRepository: heroRepo, appDatabase: db);
       bloc.add(const LoadSanctuary());
 
-      await expectLater(
-        bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>()),
-      );
+      await expectLater(bloc.stream, emitsThrough(isA<SanctuaryLoaded>()));
 
       bloc.add(const ExportBackupEvent());
 
       await expectLater(
         bloc.stream,
-        emitsThrough(isA<SanctuaryLoaded>().having(
-          (s) => s.exportedBackupJson?.contains('"hero"'),
-          'hasHeroBackup',
-          true,
-        )),
+        emitsThrough(
+          isA<SanctuaryLoaded>().having(
+            (s) => s.exportedBackupJson?.contains('"hero"'),
+            'hasHeroBackup',
+            true,
+          ),
+        ),
       );
 
       final state = bloc.state as SanctuaryLoaded;

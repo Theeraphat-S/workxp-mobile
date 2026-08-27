@@ -62,8 +62,9 @@ class DungeonMapPage extends StatelessWidget {
           builder: (context, state) {
             final bosses = state is DungeonLoaded ? state.bosses : <Boss>[];
             final activeBoss = state is DungeonLoaded ? state.activeBoss : null;
-            final maxUnlocked =
-                state is DungeonLoaded ? state.unlockedChapterMax : 1;
+            final maxUnlocked = state is DungeonLoaded
+                ? state.unlockedChapterMax
+                : 1;
 
             return SafeArea(
               child: SingleChildScrollView(
@@ -122,9 +123,8 @@ class DungeonMapPage extends StatelessWidget {
                               SensoryService.instance.playClick();
                               showDialog(
                                 context: context,
-                                builder: (ctx) => BestiaryDialog(
-                                  driftDefeatedBosses: bosses,
-                                ),
+                                builder: (ctx) =>
+                                    BestiaryDialog(driftDefeatedBosses: bosses),
                               );
                             },
                           ),
@@ -137,7 +137,9 @@ class DungeonMapPage extends StatelessWidget {
                     ..._chapterMetadata.map((meta) {
                       final chapterNum = meta['chapter'] as int;
                       final chapterName = meta['name'] as String;
-                      final boss = bosses.where((b) => b.chapter == chapterNum).firstOrNull;
+                      final boss = bosses
+                          .where((b) => b.chapter == chapterNum)
+                          .firstOrNull;
 
                       final isUnlocked = chapterNum <= maxUnlocked;
                       final isCurrent = activeBoss?.chapter == chapterNum;
@@ -154,9 +156,9 @@ class DungeonMapPage extends StatelessWidget {
                           isDefeated: isDefeated,
                           onSelect: () {
                             SensoryService.instance.playClick();
-                            context
-                                .read<DungeonBloc>()
-                                .add(SelectChapter(chapterNum));
+                            context.read<DungeonBloc>().add(
+                              SelectChapter(chapterNum),
+                            );
                           },
                         ),
                       );

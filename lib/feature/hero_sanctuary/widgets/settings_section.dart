@@ -118,9 +118,9 @@ class _SettingsSectionState extends State<SettingsSection> {
                     backgroundColor: PixelColors.backgroundSurface,
                     textColor: PixelColors.coinGold,
                     onPressed: () {
-                      context
-                          .read<SanctuaryBloc>()
-                          .add(const ExportBackupEvent());
+                      context.read<SanctuaryBloc>().add(
+                        const ExportBackupEvent(),
+                      );
                     },
                   ),
                 ),
@@ -139,9 +139,9 @@ class _SettingsSectionState extends State<SettingsSection> {
                         builder: (ctx) => JsonBackupDialog(
                           isExport: false,
                           onImport: (jsonStr) {
-                            context
-                                .read<SanctuaryBloc>()
-                                .add(ImportBackupEvent(jsonStr));
+                            context.read<SanctuaryBloc>().add(
+                              ImportBackupEvent(jsonStr),
+                            );
                           },
                         ),
                       );

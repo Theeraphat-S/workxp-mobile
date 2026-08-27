@@ -25,7 +25,8 @@ class TitleSelectionWidget extends StatelessWidget {
     'Legendary Hero',
   ];
 
-  String get activeTitle => hero?.activeTitle ?? heroModel?.activeTitleId ?? 'Novice Adventurer';
+  String get activeTitle =>
+      hero?.activeTitle ?? heroModel?.activeTitleId ?? 'Novice Adventurer';
 
   List<String> get unlockedTitles {
     if (heroModel != null && heroModel!.unlockedTitles.isNotEmpty) {

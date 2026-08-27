@@ -19,11 +19,11 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     required HeroRepository heroRepository,
     required DailyQuestRepository dailyQuestRepository,
     required HabitRepository habitRepository,
-  })  : _combatLogRepository = combatLogRepository,
-        _heroRepository = heroRepository,
-        _dailyQuestRepository = dailyQuestRepository,
-        _habitRepository = habitRepository,
-        super(const AnalyticsInitial()) {
+  }) : _combatLogRepository = combatLogRepository,
+       _heroRepository = heroRepository,
+       _dailyQuestRepository = dailyQuestRepository,
+       _habitRepository = habitRepository,
+       super(const AnalyticsInitial()) {
     on<LoadAnalytics>(_onLoadAnalytics);
     on<AnalyticsUpdated>(_onAnalyticsUpdated);
     on<RefreshAnalytics>(_onRefreshAnalytics);
@@ -82,12 +82,14 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
 
   void _dispatchUpdated() {
     if (isClosed) return;
-    add(AnalyticsUpdated(
-      combatLogs: _cachedLogs,
-      hero: _cachedHero,
-      dailies: _cachedDailies,
-      habits: _cachedHabits,
-    ));
+    add(
+      AnalyticsUpdated(
+        combatLogs: _cachedLogs,
+        hero: _cachedHero,
+        dailies: _cachedDailies,
+        habits: _cachedHabits,
+      ),
+    );
   }
 
   void _onAnalyticsUpdated(
@@ -116,19 +118,29 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     );
 
     final dailyLogs = _buildDailyLogs(event.combatLogs);
-    final achievements = _buildAchievements(event.combatLogs, hero, event.dailies);
-    final leaderboard = _buildLeaderboard(hero, event.combatLogs, event.dailies);
+    final achievements = _buildAchievements(
+      event.combatLogs,
+      hero,
+      event.dailies,
+    );
+    final leaderboard = _buildLeaderboard(
+      hero,
+      event.combatLogs,
+      event.dailies,
+    );
 
-    emit(AnalyticsLoaded(
-      combatLogs: event.combatLogs,
-      hero: hero,
-      heroModel: heroModel,
-      dailies: event.dailies,
-      habits: event.habits,
-      dailyLogs: dailyLogs,
-      achievements: achievements,
-      leaderboard: leaderboard,
-    ));
+    emit(
+      AnalyticsLoaded(
+        combatLogs: event.combatLogs,
+        hero: hero,
+        heroModel: heroModel,
+        dailies: event.dailies,
+        habits: event.habits,
+        dailyLogs: dailyLogs,
+        achievements: achievements,
+        leaderboard: leaderboard,
+      ),
+    );
   }
 
   Future<void> _onRefreshAnalytics(
@@ -157,12 +169,14 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
         }
       }
 
-      list.add(DailyActivityLog(
-        date: date,
-        expEarned: exp,
-        damageDealt: damage,
-        habitCompletions: 0,
-      ));
+      list.add(
+        DailyActivityLog(
+          date: date,
+          expEarned: exp,
+          damageDealt: damage,
+          habitCompletions: 0,
+        ),
+      );
     }
 
     return list;
@@ -198,7 +212,9 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
         id: 'ach_slime_slayer',
         title: 'Slime Slayer',
         description: 'Conquer Chapter 1 and defeat King Slime.',
-        isUnlocked: logs.any((l) => l.textContent.contains('Slime') || l.damage >= 200),
+        isUnlocked: logs.any(
+          (l) => l.textContent.contains('Slime') || l.damage >= 200,
+        ),
       ),
       AchievementModel(
         id: 'ach_dragon_slayer',
@@ -233,7 +249,10 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     List<DailyQuest> dailies,
   ) {
     final weeklyHeroDamage = logs.fold<int>(0, (sum, l) => sum + l.damage);
-    final maxStreak = dailies.fold<int>(0, (m, d) => d.streak > m ? d.streak : m);
+    final maxStreak = dailies.fold<int>(
+      0,
+      (m, d) => d.streak > m ? d.streak : m,
+    );
 
     final heroEntry = LeaderboardEntryModel(
       rank: 0,
@@ -255,15 +274,17 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     final ranked = <LeaderboardEntryModel>[];
     for (int i = 0; i < allEntries.length; i++) {
       final entry = allEntries[i];
-      ranked.add(LeaderboardEntryModel(
-        rank: i + 1,
-        name: entry.name,
-        title: entry.title,
-        skinId: entry.skinId,
-        weeklyDamage: entry.weeklyDamage,
-        streak: entry.streak,
-        isHero: entry.isHero,
-      ));
+      ranked.add(
+        LeaderboardEntryModel(
+          rank: i + 1,
+          name: entry.name,
+          title: entry.title,
+          skinId: entry.skinId,
+          weeklyDamage: entry.weeklyDamage,
+          streak: entry.streak,
+          isHero: entry.isHero,
+        ),
+      );
     }
 
     return ranked;

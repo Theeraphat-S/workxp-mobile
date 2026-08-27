@@ -48,26 +48,38 @@ void main() {
         expect(
           () async => await db.transaction(() async {
             // 1. Deduct coins and update hero
-            await (db.update(db.heroes)..where((tbl) => tbl.id.equals('hero_player')))
+            await (db.update(db.heroes)
+                  ..where((tbl) => tbl.id.equals('hero_player')))
                 .write(const HeroesCompanion(coins: Value(50), hp: Value(80)));
 
             // 2. Damage boss
-            await (db.update(db.bosses)..where((tbl) => tbl.id.equals('boss_slime')))
+            await (db.update(db.bosses)
+                  ..where((tbl) => tbl.id.equals('boss_slime')))
                 .write(BossesCompanion(currentHp: Value(initialBossHp - 100)));
 
             // 3. Deliberately trigger an unhandled failure
-            throw StateError('Simulated critical crash during transaction execution!');
+            throw StateError(
+              'Simulated critical crash during transaction execution!',
+            );
           }),
           throwsA(isA<StateError>()),
         );
 
         // Verify Hero and Boss states are completely rolled back to pre-transaction values
         final postHero = (await heroRepo.getHero())!;
-        expect(postHero.coins, equals(100), reason: 'Hero coins must be rolled back');
+        expect(
+          postHero.coins,
+          equals(100),
+          reason: 'Hero coins must be rolled back',
+        );
         expect(postHero.hp, equals(100), reason: 'Hero HP must be rolled back');
 
         final postBoss = (await bossRepo.getActiveBoss())!;
-        expect(postBoss.currentHp, equals(initialBossHp), reason: 'Boss HP must be rolled back');
+        expect(
+          postBoss.currentHp,
+          equals(initialBossHp),
+          reason: 'Boss HP must be rolled back',
+        );
       },
     );
 
@@ -121,7 +133,9 @@ void main() {
             // Successful transaction
             await db.transaction(() async {
               await heroRepo.gainCoins(10);
-              await db.into(db.combatLogs).insert(
+              await db
+                  .into(db.combatLogs)
+                  .insert(
                     CombatLogsCompanion.insert(
                       id: 'log_$i',
                       textContent: 'Success tx $i',
@@ -152,321 +166,382 @@ void main() {
     );
   });
 
-  group('Empirical Challenge 2: Stream Subscriptions, Sequential & Concurrent Writes', () {
-    late AppDatabase db;
-    late HeroRepository heroRepo;
-    late BossRepository bossRepo;
-    late QuestRepository questRepo;
-    late DailyQuestRepository dailyRepo;
-    late HabitRepository habitRepo;
-    late TavernRepository tavernRepo;
-    late CombatLogRepository logRepo;
+  group(
+    'Empirical Challenge 2: Stream Subscriptions, Sequential & Concurrent Writes',
+    () {
+      late AppDatabase db;
+      late HeroRepository heroRepo;
+      late BossRepository bossRepo;
+      late QuestRepository questRepo;
+      late DailyQuestRepository dailyRepo;
+      late HabitRepository habitRepo;
+      late TavernRepository tavernRepo;
+      late CombatLogRepository logRepo;
 
-    setUp(() {
-      db = AppDatabase(NativeDatabase.memory());
-      heroRepo = HeroRepositoryImpl(db);
-      bossRepo = BossRepositoryImpl(db);
-      questRepo = QuestRepositoryImpl(db);
-      dailyRepo = DailyQuestRepositoryImpl(db);
-      habitRepo = HabitRepositoryImpl(db);
-      tavernRepo = TavernRepositoryImpl(db);
-      logRepo = CombatLogRepositoryImpl(db);
-    });
+      setUp(() {
+        db = AppDatabase(NativeDatabase.memory());
+        heroRepo = HeroRepositoryImpl(db);
+        bossRepo = BossRepositoryImpl(db);
+        questRepo = QuestRepositoryImpl(db);
+        dailyRepo = DailyQuestRepositoryImpl(db);
+        habitRepo = HabitRepositoryImpl(db);
+        tavernRepo = TavernRepositoryImpl(db);
+        logRepo = CombatLogRepositoryImpl(db);
+      });
 
-    tearDown(() async {
-      await db.close();
-    });
+      tearDown(() async {
+        await db.close();
+      });
 
-    test(
-      '2.1 50 concurrent Stream listeners receive ordered updates during 50 rapid sequential mutations',
-      () async {
-        const int subscriberCount = 50;
-        const int mutationCount = 50;
+      test(
+        '2.1 50 concurrent Stream listeners receive ordered updates during 50 rapid sequential mutations',
+        () async {
+          const int subscriberCount = 50;
+          const int mutationCount = 50;
 
-        final List<List<int>> heroHpHistories = List.generate(subscriberCount, (_) => []);
-        final List<StreamSubscription<Hero?>> subscriptions = [];
+          final List<List<int>> heroHpHistories = List.generate(
+            subscriberCount,
+            (_) => [],
+          );
+          final List<StreamSubscription<Hero?>> subscriptions = [];
 
-        // Attach 50 listeners to watchHero()
-        for (int i = 0; i < subscriberCount; i++) {
-          final index = i;
-          final sub = heroRepo.watchHero().listen((hero) {
-            if (hero != null) {
-              heroHpHistories[index].add(hero.hp);
+          // Attach 50 listeners to watchHero()
+          for (int i = 0; i < subscriberCount; i++) {
+            final index = i;
+            final sub = heroRepo.watchHero().listen((hero) {
+              if (hero != null) {
+                heroHpHistories[index].add(hero.hp);
+              }
+            });
+            subscriptions.add(sub);
+          }
+
+          // Allow initial emission to settle
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          // Perform 50 rapid sequential HP damage & heal mutations
+          for (int i = 1; i <= mutationCount; i++) {
+            if (i % 2 == 1) {
+              await heroRepo.takeDamage(1);
+            } else {
+              await heroRepo.heal(1);
+            }
+          }
+
+          // Allow streams to flush
+          await Future.delayed(const Duration(milliseconds: 100));
+
+          // Verify all 50 subscribers observed the mutations and ended with identical HP
+          final finalHero = (await heroRepo.getHero())!;
+          for (int i = 0; i < subscriberCount; i++) {
+            expect(
+              heroHpHistories[i].isNotEmpty,
+              isTrue,
+              reason: 'Subscriber $i must have received events',
+            );
+            expect(
+              heroHpHistories[i].last,
+              equals(finalHero.hp),
+              reason: 'Subscriber $i must converge to the final HP state',
+            );
+          }
+
+          // Clean up subscriptions
+          for (final sub in subscriptions) {
+            await sub.cancel();
+          }
+        },
+      );
+
+      test(
+        '2.2 High-throughput rapid sequential writes across all 7 repositories maintain full integrity',
+        () async {
+          const int iterations = 10;
+
+          for (int i = 0; i < iterations; i++) {
+            await heroRepo.awardExp(15);
+            await bossRepo.applyDamage(5);
+            await questRepo.createQuest(title: 'Sequential Quest $i');
+            await dailyRepo.createDailyQuest(title: 'Sequential Daily $i');
+            await habitRepo.createHabit(title: 'Sequential Habit $i');
+            await tavernRepo.createCustomReward(
+              name: 'Reward $i',
+              cost: 10 + i,
+            );
+            await logRepo.addLog(text: 'Sequential Log $i', damage: i);
+          }
+
+          // Verify integrity across all tables
+          final hero = (await heroRepo.getHero())!;
+          // 10 * 15 = 150 exp -> Level 1 (100 exp required) -> Level 2 with 50 exp
+          expect(hero.level, equals(2));
+          expect(hero.currentExp, equals(50));
+
+          final boss = (await bossRepo.getActiveBoss())!;
+          expect(boss.currentHp, equals(500 - (iterations * 5)));
+
+          final quests = await questRepo.getQuests();
+          expect(quests.length, equals(3 + iterations));
+
+          final dailies = await dailyRepo.getDailyQuests();
+          expect(dailies.length, equals(3 + iterations));
+
+          final habits = await habitRepo.getHabits();
+          expect(habits.length, equals(3 + iterations));
+
+          final rewards = await tavernRepo.getCustomRewards();
+          expect(rewards.length, equals(2 + iterations));
+
+          final logs = await logRepo.getRecentLogs(limit: 100);
+          expect(logs.length, equals(iterations));
+        },
+      );
+
+      test(
+        '2.3 Concurrent independent entity insertions across repositories succeed via Future.wait',
+        () async {
+          const int count = 20;
+
+          // Inserting independent unique entities concurrently
+          await Future.wait([
+            ...List.generate(
+              count,
+              (i) => questRepo.createQuest(title: 'Parallel Quest $i'),
+            ),
+            ...List.generate(
+              count,
+              (i) => dailyRepo.createDailyQuest(title: 'Parallel Daily $i'),
+            ),
+            ...List.generate(
+              count,
+              (i) => habitRepo.createHabit(title: 'Parallel Habit $i'),
+            ),
+            ...List.generate(
+              count,
+              (i) => tavernRepo.createCustomReward(
+                name: 'Parallel Reward $i',
+                cost: 10 + i,
+              ),
+            ),
+            ...List.generate(
+              count,
+              (i) => logRepo.addLog(text: 'Parallel Log $i', damage: i),
+            ),
+          ]);
+
+          final quests = await questRepo.getQuests();
+          expect(quests.length, equals(3 + count));
+
+          final dailies = await dailyRepo.getDailyQuests();
+          expect(dailies.length, equals(3 + count));
+
+          final habits = await habitRepo.getHabits();
+          expect(habits.length, equals(3 + count));
+
+          final rewards = await tavernRepo.getCustomRewards();
+          expect(rewards.length, equals(2 + count));
+
+          final logs = await logRepo.getRecentLogs(limit: 100);
+          expect(logs.length, equals(count));
+        },
+      );
+
+      test(
+        '2.4 Read-Modify-Write Concurrency Analysis: Documents un-synchronized parallel calls on singleton hero record',
+        () async {
+          // When multiple un-awaited awardExp or gainCoins are fired in parallel without a lock:
+          // Because awardExp reads `getHero()` then writes, concurrent calls interleave reads.
+          const int concurrentCalls = 10;
+
+          // Dispatch 10 parallel gainCoins(10) calls
+          await Future.wait(
+            List.generate(concurrentCalls, (_) => heroRepo.gainCoins(10)),
+          );
+
+          final hero = (await heroRepo.getHero())!;
+          // Document empirical result: without mutex/transaction or SQL expressions,
+          // read-modify-write results in lost updates if called concurrently without sequential awaiting.
+          // Sequential calls (as handled by BLoC event loops) result in exact 100 coins.
+          expect(hero.coins, greaterThanOrEqualTo(10));
+        },
+      );
+
+      test(
+        '2.5 Rapid subscription attachment and disposal under continuous write load does not leak or crash',
+        () async {
+          bool running = true;
+          int writeCount = 0;
+
+          // Background worker performing rapid writes
+          final backgroundTask = Future(() async {
+            while (running) {
+              await heroRepo.gainCoins(1);
+              writeCount++;
+              await Future.delayed(const Duration(milliseconds: 2));
             }
           });
-          subscriptions.add(sub);
-        }
 
-        // Allow initial emission to settle
-        await Future.delayed(const Duration(milliseconds: 50));
-
-        // Perform 50 rapid sequential HP damage & heal mutations
-        for (int i = 1; i <= mutationCount; i++) {
-          if (i % 2 == 1) {
-            await heroRepo.takeDamage(1);
-          } else {
-            await heroRepo.heal(1);
+          // Foreground worker attaching and detaching 100 stream listeners
+          for (int i = 0; i < 100; i++) {
+            final sub = heroRepo.watchHero().listen((_) {});
+            await Future.delayed(const Duration(milliseconds: 3));
+            await sub.cancel();
           }
-        }
 
-        // Allow streams to flush
-        await Future.delayed(const Duration(milliseconds: 100));
+          running = false;
+          await backgroundTask;
 
-        // Verify all 50 subscribers observed the mutations and ended with identical HP
-        final finalHero = (await heroRepo.getHero())!;
-        for (int i = 0; i < subscriberCount; i++) {
-          expect(
-            heroHpHistories[i].isNotEmpty,
-            isTrue,
-            reason: 'Subscriber $i must have received events',
-          );
-          expect(
-            heroHpHistories[i].last,
-            equals(finalHero.hp),
-            reason: 'Subscriber $i must converge to the final HP state',
-          );
-        }
+          expect(writeCount, greaterThan(10));
+          final hero = (await heroRepo.getHero())!;
+          expect(hero.coins, equals(writeCount));
+        },
+      );
+    },
+  );
 
-        // Clean up subscriptions
-        for (final sub in subscriptions) {
-          await sub.cancel();
-        }
-      },
-    );
+  group(
+    'Empirical Challenge 3: Database Initialization & Persistent SQLite File Lifecycle',
+    () {
+      late Directory tempDir;
 
-    test(
-      '2.2 High-throughput rapid sequential writes across all 7 repositories maintain full integrity',
-      () async {
-        const int iterations = 10;
-
-        for (int i = 0; i < iterations; i++) {
-          await heroRepo.awardExp(15);
-          await bossRepo.applyDamage(5);
-          await questRepo.createQuest(title: 'Sequential Quest $i');
-          await dailyRepo.createDailyQuest(title: 'Sequential Daily $i');
-          await habitRepo.createHabit(title: 'Sequential Habit $i');
-          await tavernRepo.createCustomReward(name: 'Reward $i', cost: 10 + i);
-          await logRepo.addLog(text: 'Sequential Log $i', damage: i);
-        }
-
-        // Verify integrity across all tables
-        final hero = (await heroRepo.getHero())!;
-        // 10 * 15 = 150 exp -> Level 1 (100 exp required) -> Level 2 with 50 exp
-        expect(hero.level, equals(2));
-        expect(hero.currentExp, equals(50));
-
-        final boss = (await bossRepo.getActiveBoss())!;
-        expect(boss.currentHp, equals(500 - (iterations * 5)));
-
-        final quests = await questRepo.getQuests();
-        expect(quests.length, equals(3 + iterations));
-
-        final dailies = await dailyRepo.getDailyQuests();
-        expect(dailies.length, equals(3 + iterations));
-
-        final habits = await habitRepo.getHabits();
-        expect(habits.length, equals(3 + iterations));
-
-        final rewards = await tavernRepo.getCustomRewards();
-        expect(rewards.length, equals(2 + iterations));
-
-        final logs = await logRepo.getRecentLogs(limit: 100);
-        expect(logs.length, equals(iterations));
-      },
-    );
-
-    test(
-      '2.3 Concurrent independent entity insertions across repositories succeed via Future.wait',
-      () async {
-        const int count = 20;
-
-        // Inserting independent unique entities concurrently
-        await Future.wait([
-          ...List.generate(count, (i) => questRepo.createQuest(title: 'Parallel Quest $i')),
-          ...List.generate(count, (i) => dailyRepo.createDailyQuest(title: 'Parallel Daily $i')),
-          ...List.generate(count, (i) => habitRepo.createHabit(title: 'Parallel Habit $i')),
-          ...List.generate(count, (i) => tavernRepo.createCustomReward(name: 'Parallel Reward $i', cost: 10 + i)),
-          ...List.generate(count, (i) => logRepo.addLog(text: 'Parallel Log $i', damage: i)),
-        ]);
-
-        final quests = await questRepo.getQuests();
-        expect(quests.length, equals(3 + count));
-
-        final dailies = await dailyRepo.getDailyQuests();
-        expect(dailies.length, equals(3 + count));
-
-        final habits = await habitRepo.getHabits();
-        expect(habits.length, equals(3 + count));
-
-        final rewards = await tavernRepo.getCustomRewards();
-        expect(rewards.length, equals(2 + count));
-
-        final logs = await logRepo.getRecentLogs(limit: 100);
-        expect(logs.length, equals(count));
-      },
-    );
-
-    test(
-      '2.4 Read-Modify-Write Concurrency Analysis: Documents un-synchronized parallel calls on singleton hero record',
-      () async {
-        // When multiple un-awaited awardExp or gainCoins are fired in parallel without a lock:
-        // Because awardExp reads `getHero()` then writes, concurrent calls interleave reads.
-        const int concurrentCalls = 10;
-
-        // Dispatch 10 parallel gainCoins(10) calls
-        await Future.wait(List.generate(concurrentCalls, (_) => heroRepo.gainCoins(10)));
-
-        final hero = (await heroRepo.getHero())!;
-        // Document empirical result: without mutex/transaction or SQL expressions,
-        // read-modify-write results in lost updates if called concurrently without sequential awaiting.
-        // Sequential calls (as handled by BLoC event loops) result in exact 100 coins.
-        expect(hero.coins, greaterThanOrEqualTo(10));
-      },
-    );
-
-    test(
-      '2.5 Rapid subscription attachment and disposal under continuous write load does not leak or crash',
-      () async {
-        bool running = true;
-        int writeCount = 0;
-
-        // Background worker performing rapid writes
-        final backgroundTask = Future(() async {
-          while (running) {
-            await heroRepo.gainCoins(1);
-            writeCount++;
-            await Future.delayed(const Duration(milliseconds: 2));
-          }
-        });
-
-        // Foreground worker attaching and detaching 100 stream listeners
-        for (int i = 0; i < 100; i++) {
-          final sub = heroRepo.watchHero().listen((_) {});
-          await Future.delayed(const Duration(milliseconds: 3));
-          await sub.cancel();
-        }
-
-        running = false;
-        await backgroundTask;
-
-        expect(writeCount, greaterThan(10));
-        final hero = (await heroRepo.getHero())!;
-        expect(hero.coins, equals(writeCount));
-      },
-    );
-  });
-
-  group('Empirical Challenge 3: Database Initialization & Persistent SQLite File Lifecycle', () {
-    late Directory tempDir;
-
-    setUp(() {
-      tempDir = Directory.systemTemp.createTempSync('workxp_drift_challenge_');
-    });
-
-    tearDown(() {
-      try {
-        if (tempDir.existsSync()) {
-          tempDir.deleteSync(recursive: true);
-        }
-      } catch (_) {}
-    });
-
-    test(
-      '3.1 Persistent SQLite file persists mutations across database restart without re-seeding wipe',
-      () async {
-        final dbFile = File('${tempDir.path}/workxp_persistent.db');
-        expect(dbFile.existsSync(), isFalse);
-
-        // 1. Initial Launch: Create database on disk
-        final db1 = AppDatabase(NativeDatabase(dbFile));
-        final heroRepo1 = HeroRepositoryImpl(db1);
-        final questRepo1 = QuestRepositoryImpl(db1);
-        final bossRepo1 = BossRepositoryImpl(db1);
-
-        // Verify starter kit was seeded on creation
-        final initialHero = (await heroRepo1.getHero())!;
-        expect(initialHero.name, equals('Arthur'));
-        expect(initialHero.level, equals(1));
-
-        // Perform permanent mutations
-        await heroRepo1.awardExp(300); // Level up
-        await heroRepo1.gainCoins(500); // Add wealth
-        await heroRepo1.equipSkin('paladin');
-        await heroRepo1.equipTitle('Seasoned Veteran');
-
-        await bossRepo1.applyDamage(250); // Damage King Slime to 250 HP
-
-        await questRepo1.createQuest(
-          title: 'Custom Persistent Quest',
-          rank: 'A',
-          baseDamage: 200,
+      setUp(() {
+        tempDir = Directory.systemTemp.createTempSync(
+          'workxp_drift_challenge_',
         );
+      });
 
-        final mutatedHero = (await heroRepo1.getHero())!;
-        expect(mutatedHero.level, greaterThanOrEqualTo(2));
-        expect(mutatedHero.coins, equals(500));
-        expect(mutatedHero.avatarSkinId, equals('paladin'));
-        expect(mutatedHero.activeTitle, equals('Seasoned Veteran'));
-
-        // Close DB 1 cleanly
-        await db1.close();
-        expect(dbFile.existsSync(), isTrue);
-
-        // 2. Re-Launch: Open existing database file with a new AppDatabase instance
-        final db2 = AppDatabase(NativeDatabase(dbFile));
-        final heroRepo2 = HeroRepositoryImpl(db2);
-        final questRepo2 = QuestRepositoryImpl(db2);
-        final bossRepo2 = BossRepositoryImpl(db2);
-
-        // Verify that onCreate did NOT wipe or re-seed data back to default Level 1
-        final reloadedHero = (await heroRepo2.getHero())!;
-        expect(reloadedHero.name, equals('Arthur'));
-        expect(reloadedHero.level, equals(mutatedHero.level), reason: 'Hero level must persist');
-        expect(reloadedHero.coins, equals(500), reason: 'Hero coins must persist');
-        expect(reloadedHero.avatarSkinId, equals('paladin'), reason: 'Hero skin must persist');
-        expect(reloadedHero.activeTitle, equals('Seasoned Veteran'), reason: 'Hero title must persist');
-
-        final reloadedBoss = (await bossRepo2.getActiveBoss())!;
-        expect(reloadedBoss.currentHp, equals(250), reason: 'Boss HP damage must persist');
-
-        final reloadedQuests = await questRepo2.getQuests();
-        expect(reloadedQuests.length, equals(4), reason: '3 starter quests + 1 custom quest must exist');
-        expect(reloadedQuests.any((q) => q.title == 'Custom Persistent Quest'), isTrue);
-
-        // Verify reactive stream works on the re-opened DB
-        final Completer<Hero> streamCompleter = Completer<Hero>();
-        final sub = heroRepo2.watchHero().listen((h) {
-          if (h != null && !streamCompleter.isCompleted) {
-            streamCompleter.complete(h);
+      tearDown(() {
+        try {
+          if (tempDir.existsSync()) {
+            tempDir.deleteSync(recursive: true);
           }
-        });
+        } catch (_) {}
+      });
 
-        final streamedHero = await streamCompleter.future;
-        expect(streamedHero.coins, equals(500));
-        await sub.cancel();
+      test(
+        '3.1 Persistent SQLite file persists mutations across database restart without re-seeding wipe',
+        () async {
+          final dbFile = File('${tempDir.path}/workxp_persistent.db');
+          expect(dbFile.existsSync(), isFalse);
 
-        await db2.close();
-      },
-    );
+          // 1. Initial Launch: Create database on disk
+          final db1 = AppDatabase(NativeDatabase(dbFile));
+          final heroRepo1 = HeroRepositoryImpl(db1);
+          final questRepo1 = QuestRepositoryImpl(db1);
+          final bossRepo1 = BossRepositoryImpl(db1);
 
-    test(
-      '3.2 In-memory databases are strictly isolated and independent',
-      () async {
-        final dbA = AppDatabase(NativeDatabase.memory());
-        final dbB = AppDatabase(NativeDatabase.memory());
+          // Verify starter kit was seeded on creation
+          final initialHero = (await heroRepo1.getHero())!;
+          expect(initialHero.name, equals('Arthur'));
+          expect(initialHero.level, equals(1));
 
-        final heroA = HeroRepositoryImpl(dbA);
-        final heroB = HeroRepositoryImpl(dbB);
+          // Perform permanent mutations
+          await heroRepo1.awardExp(300); // Level up
+          await heroRepo1.gainCoins(500); // Add wealth
+          await heroRepo1.equipSkin('paladin');
+          await heroRepo1.equipTitle('Seasoned Veteran');
 
-        await heroA.gainCoins(999);
-        expect((await heroA.getHero())!.coins, equals(999));
-        expect((await heroB.getHero())!.coins, equals(0));
+          await bossRepo1.applyDamage(250); // Damage King Slime to 250 HP
 
-        await dbA.close();
-        await dbB.close();
-      },
-    );
-  });
+          await questRepo1.createQuest(
+            title: 'Custom Persistent Quest',
+            rank: 'A',
+            baseDamage: 200,
+          );
+
+          final mutatedHero = (await heroRepo1.getHero())!;
+          expect(mutatedHero.level, greaterThanOrEqualTo(2));
+          expect(mutatedHero.coins, equals(500));
+          expect(mutatedHero.avatarSkinId, equals('paladin'));
+          expect(mutatedHero.activeTitle, equals('Seasoned Veteran'));
+
+          // Close DB 1 cleanly
+          await db1.close();
+          expect(dbFile.existsSync(), isTrue);
+
+          // 2. Re-Launch: Open existing database file with a new AppDatabase instance
+          final db2 = AppDatabase(NativeDatabase(dbFile));
+          final heroRepo2 = HeroRepositoryImpl(db2);
+          final questRepo2 = QuestRepositoryImpl(db2);
+          final bossRepo2 = BossRepositoryImpl(db2);
+
+          // Verify that onCreate did NOT wipe or re-seed data back to default Level 1
+          final reloadedHero = (await heroRepo2.getHero())!;
+          expect(reloadedHero.name, equals('Arthur'));
+          expect(
+            reloadedHero.level,
+            equals(mutatedHero.level),
+            reason: 'Hero level must persist',
+          );
+          expect(
+            reloadedHero.coins,
+            equals(500),
+            reason: 'Hero coins must persist',
+          );
+          expect(
+            reloadedHero.avatarSkinId,
+            equals('paladin'),
+            reason: 'Hero skin must persist',
+          );
+          expect(
+            reloadedHero.activeTitle,
+            equals('Seasoned Veteran'),
+            reason: 'Hero title must persist',
+          );
+
+          final reloadedBoss = (await bossRepo2.getActiveBoss())!;
+          expect(
+            reloadedBoss.currentHp,
+            equals(250),
+            reason: 'Boss HP damage must persist',
+          );
+
+          final reloadedQuests = await questRepo2.getQuests();
+          expect(
+            reloadedQuests.length,
+            equals(4),
+            reason: '3 starter quests + 1 custom quest must exist',
+          );
+          expect(
+            reloadedQuests.any((q) => q.title == 'Custom Persistent Quest'),
+            isTrue,
+          );
+
+          // Verify reactive stream works on the re-opened DB
+          final Completer<Hero> streamCompleter = Completer<Hero>();
+          final sub = heroRepo2.watchHero().listen((h) {
+            if (h != null && !streamCompleter.isCompleted) {
+              streamCompleter.complete(h);
+            }
+          });
+
+          final streamedHero = await streamCompleter.future;
+          expect(streamedHero.coins, equals(500));
+          await sub.cancel();
+
+          await db2.close();
+        },
+      );
+
+      test(
+        '3.2 In-memory databases are strictly isolated and independent',
+        () async {
+          final dbA = AppDatabase(NativeDatabase.memory());
+          final dbB = AppDatabase(NativeDatabase.memory());
+
+          final heroA = HeroRepositoryImpl(dbA);
+          final heroB = HeroRepositoryImpl(dbB);
+
+          await heroA.gainCoins(999);
+          expect((await heroA.getHero())!.coins, equals(999));
+          expect((await heroB.getHero())!.coins, equals(0));
+
+          await dbA.close();
+          await dbB.close();
+        },
+      );
+    },
+  );
 
   group('Empirical Challenge 4: Starter Kit Seeding Idempotence', () {
     late AppDatabase db;
@@ -489,22 +564,46 @@ void main() {
 
         // Verify exact table counts
         final heroes = await db.select(db.heroes).get();
-        expect(heroes.length, equals(1), reason: 'Only 1 Hero row should exist');
+        expect(
+          heroes.length,
+          equals(1),
+          reason: 'Only 1 Hero row should exist',
+        );
 
         final bosses = await db.select(db.bosses).get();
-        expect(bosses.length, equals(4), reason: 'Exactly 4 chapter bosses should exist');
+        expect(
+          bosses.length,
+          equals(4),
+          reason: 'Exactly 4 chapter bosses should exist',
+        );
 
         final quests = await db.select(db.quests).get();
-        expect(quests.length, equals(3), reason: 'Exactly 3 starter quests should exist');
+        expect(
+          quests.length,
+          equals(3),
+          reason: 'Exactly 3 starter quests should exist',
+        );
 
         final dailyQuests = await db.select(db.dailyQuests).get();
-        expect(dailyQuests.length, equals(3), reason: 'Exactly 3 starter daily quests should exist');
+        expect(
+          dailyQuests.length,
+          equals(3),
+          reason: 'Exactly 3 starter daily quests should exist',
+        );
 
         final habits = await db.select(db.habits).get();
-        expect(habits.length, equals(3), reason: 'Exactly 3 starter habits should exist');
+        expect(
+          habits.length,
+          equals(3),
+          reason: 'Exactly 3 starter habits should exist',
+        );
 
         final tavernItems = await db.select(db.tavernItems).get();
-        expect(tavernItems.length, equals(12), reason: 'Exactly 12 starter tavern items should exist');
+        expect(
+          tavernItems.length,
+          equals(12),
+          reason: 'Exactly 12 starter tavern items should exist',
+        );
       },
     );
 
@@ -566,7 +665,8 @@ void main() {
       '5.1 Unicode, Thai scripts, special symbols, and massive 10,000 char strings persist and query cleanly',
       () async {
         final massiveDesc = 'A' * 10000;
-        const thaiTitle = 'ภารกิจพิชิตจอมมารสไลม์ระดับตำนาน 🗡️🔥✨ (Epic Boss Strike)';
+        const thaiTitle =
+            'ภารกิจพิชิตจอมมารสไลม์ระดับตำนาน 🗡️🔥✨ (Epic Boss Strike)';
 
         final quest = await questRepo.createQuest(
           title: thaiTitle,
@@ -593,8 +693,13 @@ void main() {
         final habit = await habitRepo.createHabit(title: 'Resilience Habit');
 
         // Manually inject corrupted JSON into habits table
-        await (db.update(db.habits)..where((tbl) => tbl.id.equals(habit.id)))
-            .write(const HabitsCompanion(historyDatesJson: Value('INVALID_CORRUPTED_JSON{[')));
+        await (db.update(
+          db.habits,
+        )..where((tbl) => tbl.id.equals(habit.id))).write(
+          const HabitsCompanion(
+            historyDatesJson: Value('INVALID_CORRUPTED_JSON{['),
+          ),
+        );
 
         // Logging habit should not throw and should cleanly recover date history
         final updated = await habitRepo.logHabit(habit.id, true);

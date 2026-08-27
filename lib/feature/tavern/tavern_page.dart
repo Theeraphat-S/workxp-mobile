@@ -31,185 +31,185 @@ class _TavernPageState extends State<TavernPage> {
   Widget build(BuildContext context) {
     Widget content = Scaffold(
       appBar: AppBar(
-          title: Text(
-            'THE TAVERN',
-            style: PixelTypography.pixelHeader(
-              fontSize: 14,
-              color: PixelColors.coinGold,
-            ),
+        title: Text(
+          'THE TAVERN',
+          style: PixelTypography.pixelHeader(
+            fontSize: 14,
+            color: PixelColors.coinGold,
           ),
-          backgroundColor: PixelColors.backgroundDark,
-          actions: [
-            BlocBuilder<TavernBloc, TavernState>(
-              builder: (context, state) {
-                final inventory =
-                    state is TavernLoaded ? state.inventory : <TavernItem>[];
-                return IconButton(
-                  icon: const Icon(Icons.backpack, color: PixelColors.coinGold),
-                  tooltip: 'Inventory',
-                  onPressed: () {
-                    SensoryService.instance.playClick();
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => InventoryDialog(
-                        driftInventory: inventory,
-                        onUseItem: (id) {
-                          context
-                              .read<TavernBloc>()
-                              .add(UseConsumableItem(id));
-                        },
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
         ),
-        body: BlocBuilder<TavernBloc, TavernState>(
-          builder: (context, state) {
-            final hero = state is TavernLoaded ? state.hero : null;
-            final consumables =
-                state is TavernLoaded ? state.consumables : <TavernItem>[];
-            final cosmetics =
-                state is TavernLoaded ? state.cosmetics : <TavernItem>[];
-            final customRewards =
-                state is TavernLoaded ? state.customRewards : <TavernItem>[];
-
-            return SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Top Tavern Header & Coin Purse
-                    PixelCard(
-                      borderColor: PixelColors.borderGold,
-                      backgroundColor: PixelColors.backgroundCard,
-                      child: Row(
-                        children: [
-                          const PixelSprite(spriteType: 'coin', size: 28),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'HERO PURSE',
-                                style: PixelTypography.pixelSubheader(
-                                  fontSize: 9,
-                                  color: PixelColors.textMuted,
-                                ),
-                              ),
-                              Text(
-                                '${hero?.coins ?? 0} COINS',
-                                style: PixelTypography.pixelHeader(
-                                  fontSize: 14,
-                                  color: PixelColors.coinGold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          PixelButton(
-                            text: 'INVENTORY',
-                            fontSize: 9,
-                            backgroundColor: PixelColors.backgroundSurface,
-                            textColor: PixelColors.coinGold,
-                            onPressed: () {
-                              SensoryService.instance.playClick();
-                              final inv = state is TavernLoaded
-                                  ? state.inventory
-                                  : <TavernItem>[];
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => InventoryDialog(
-                                  driftInventory: inv,
-                                  onUseItem: (id) {
-                                    context
-                                        .read<TavernBloc>()
-                                        .add(UseConsumableItem(id));
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+        backgroundColor: PixelColors.backgroundDark,
+        actions: [
+          BlocBuilder<TavernBloc, TavernState>(
+            builder: (context, state) {
+              final inventory = state is TavernLoaded
+                  ? state.inventory
+                  : <TavernItem>[];
+              return IconButton(
+                icon: const Icon(Icons.backpack, color: PixelColors.coinGold),
+                tooltip: 'Inventory',
+                onPressed: () {
+                  SensoryService.instance.playClick();
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => InventoryDialog(
+                      driftInventory: inventory,
+                      onUseItem: (id) {
+                        context.read<TavernBloc>().add(UseConsumableItem(id));
+                      },
                     ),
-                    const SizedBox(height: 14),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      body: BlocBuilder<TavernBloc, TavernState>(
+        builder: (context, state) {
+          final hero = state is TavernLoaded ? state.hero : null;
+          final consumables = state is TavernLoaded
+              ? state.consumables
+              : <TavernItem>[];
+          final cosmetics = state is TavernLoaded
+              ? state.cosmetics
+              : <TavernItem>[];
+          final customRewards = state is TavernLoaded
+              ? state.customRewards
+              : <TavernItem>[];
 
-                    // Marketplace Category Selector
-                    Container(
-                      decoration: BoxDecoration(
-                        color: PixelColors.backgroundDark,
-                        border: Border.all(color: PixelColors.borderHighlight),
-                      ),
-                      child: Row(
-                        children: [
-                          _buildTabItem(0, 'POTIONS', Icons.science),
-                          _buildTabItem(1, 'COSMETICS', Icons.palette),
-                          _buildTabItem(2, 'REWARDS', Icons.card_giftcard),
-                        ],
-                      ),
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Top Tavern Header & Coin Purse
+                  PixelCard(
+                    borderColor: PixelColors.borderGold,
+                    backgroundColor: PixelColors.backgroundCard,
+                    child: Row(
+                      children: [
+                        const PixelSprite(spriteType: 'coin', size: 28),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'HERO PURSE',
+                              style: PixelTypography.pixelSubheader(
+                                fontSize: 9,
+                                color: PixelColors.textMuted,
+                              ),
+                            ),
+                            Text(
+                              '${hero?.coins ?? 0} COINS',
+                              style: PixelTypography.pixelHeader(
+                                fontSize: 14,
+                                color: PixelColors.coinGold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        PixelButton(
+                          text: 'INVENTORY',
+                          fontSize: 9,
+                          backgroundColor: PixelColors.backgroundSurface,
+                          textColor: PixelColors.coinGold,
+                          onPressed: () {
+                            SensoryService.instance.playClick();
+                            final inv = state is TavernLoaded
+                                ? state.inventory
+                                : <TavernItem>[];
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => InventoryDialog(
+                                driftInventory: inv,
+                                onUseItem: (id) {
+                                  context.read<TavernBloc>().add(
+                                    UseConsumableItem(id),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 14),
 
-                    // Active Tab Content
-                    if (_activeTabIndex == 0)
-                      ConsumablesTab(
-                        driftItems: consumables,
-                        hero: hero,
-                        onBuy: (id) {
-                          context.read<TavernBloc>().add(PurchaseItem(id));
-                        },
-                      )
-                    else if (_activeTabIndex == 1)
-                      CosmeticsTab(
-                        driftItems: cosmetics,
-                        hero: hero,
-                        onBuy: (id) {
-                          context.read<TavernBloc>().add(PurchaseItem(id));
-                        },
-                        onEquip: (skinId) {
-                          context
-                              .read<HeroBloc>()
-                              .add(EquipSkin(skinId));
-                        },
-                      )
-                    else if (_activeTabIndex == 2)
-                      CustomRewardsTab(
-                        driftRewards: customRewards,
-                        hero: hero,
-                        onRedeem: (id) {
-                          context
-                              .read<TavernBloc>()
-                              .add(RedeemCustomRewardEvent(id));
-                          return true;
-                        },
-                        onAdd: (newReward) {
-                          context
-                              .read<TavernBloc>()
-                              .add(CreateCustomRewardEvent(
-                                name: newReward.title,
-                                cost: newReward.coinCost,
-                                description: newReward.description,
-                                iconAsset: newReward.iconName,
-                                id: newReward.id,
-                              ));
-                        },
-                        onDelete: (id) {
-                          context
-                              .read<TavernBloc>()
-                              .add(DeleteCustomRewardEvent(id));
-                        },
-                      ),
-                  ],
-                ),
+                  // Marketplace Category Selector
+                  Container(
+                    decoration: BoxDecoration(
+                      color: PixelColors.backgroundDark,
+                      border: Border.all(color: PixelColors.borderHighlight),
+                    ),
+                    child: Row(
+                      children: [
+                        _buildTabItem(0, 'POTIONS', Icons.science),
+                        _buildTabItem(1, 'COSMETICS', Icons.palette),
+                        _buildTabItem(2, 'REWARDS', Icons.card_giftcard),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Active Tab Content
+                  if (_activeTabIndex == 0)
+                    ConsumablesTab(
+                      driftItems: consumables,
+                      hero: hero,
+                      onBuy: (id) {
+                        context.read<TavernBloc>().add(PurchaseItem(id));
+                      },
+                    )
+                  else if (_activeTabIndex == 1)
+                    CosmeticsTab(
+                      driftItems: cosmetics,
+                      hero: hero,
+                      onBuy: (id) {
+                        context.read<TavernBloc>().add(PurchaseItem(id));
+                      },
+                      onEquip: (skinId) {
+                        context.read<HeroBloc>().add(EquipSkin(skinId));
+                      },
+                    )
+                  else if (_activeTabIndex == 2)
+                    CustomRewardsTab(
+                      driftRewards: customRewards,
+                      hero: hero,
+                      onRedeem: (id) {
+                        context.read<TavernBloc>().add(
+                          RedeemCustomRewardEvent(id),
+                        );
+                        return true;
+                      },
+                      onAdd: (newReward) {
+                        context.read<TavernBloc>().add(
+                          CreateCustomRewardEvent(
+                            name: newReward.title,
+                            cost: newReward.coinCost,
+                            description: newReward.description,
+                            iconAsset: newReward.iconName,
+                            id: newReward.id,
+                          ),
+                        );
+                      },
+                      onDelete: (id) {
+                        context.read<TavernBloc>().add(
+                          DeleteCustomRewardEvent(id),
+                        );
+                      },
+                    ),
+                ],
               ),
-            );
-          },
-        ),
-      );
+            ),
+          );
+        },
+      ),
+    );
 
     try {
       context.read<TavernBloc>();
@@ -256,8 +256,9 @@ class _TavernPageState extends State<TavernPage> {
               Icon(
                 icon,
                 size: 14,
-                color:
-                    isSelected ? PixelColors.coinGold : PixelColors.textMuted,
+                color: isSelected
+                    ? PixelColors.coinGold
+                    : PixelColors.textMuted,
               ),
               const SizedBox(width: 4),
               Text(
