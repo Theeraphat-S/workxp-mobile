@@ -117,8 +117,10 @@ class DashboardPage extends StatelessWidget {
           if (!isSelected) {
             SensoryService.instance.playClick();
             tabsRouter.setActiveIndex(index);
+            SensoryService.instance.playBgmForTab(index);
           }
         },
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

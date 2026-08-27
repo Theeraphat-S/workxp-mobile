@@ -52,6 +52,14 @@ class ToggleSfxEvent extends SanctuaryEvent {
   List<Object?> get props => [enabled];
 }
 
+class ToggleBgmEvent extends SanctuaryEvent {
+  const ToggleBgmEvent(this.enabled);
+  final bool enabled;
+
+  @override
+  List<Object?> get props => [enabled];
+}
+
 class ToggleHapticsEvent extends SanctuaryEvent {
   const ToggleHapticsEvent(this.enabled);
   final bool enabled;

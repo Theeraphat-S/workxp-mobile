@@ -24,7 +24,9 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
     on<EquipSkinEvent>(_onEquipSkin);
     on<EquipTitleEvent>(_onEquipTitle);
     on<ToggleSfxEvent>(_onToggleSfx);
+    on<ToggleBgmEvent>(_onToggleBgm);
     on<ToggleHapticsEvent>(_onToggleHaptics);
+
     on<ExportBackupEvent>(_onExportBackup);
     on<ImportBackupEvent>(_onImportBackup);
   }
@@ -78,6 +80,7 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
         hero: hero,
         heroModel: heroModel,
         sfxEnabled: SensoryService.instance.isSfxEnabled,
+        bgmEnabled: SensoryService.instance.isBgmEnabled,
         hapticsEnabled: SensoryService.instance.isHapticsEnabled,
       ),
     );
@@ -139,6 +142,13 @@ class SanctuaryBloc extends Bloc<SanctuaryEvent, SanctuaryState> {
     SensoryService.instance.toggleSfx(event.enabled);
     if (state is SanctuaryLoaded) {
       emit((state as SanctuaryLoaded).copyWith(sfxEnabled: event.enabled));
+    }
+  }
+
+  void _onToggleBgm(ToggleBgmEvent event, Emitter<SanctuaryState> emit) {
+    SensoryService.instance.toggleBgm(event.enabled);
+    if (state is SanctuaryLoaded) {
+      emit((state as SanctuaryLoaded).copyWith(bgmEnabled: event.enabled));
     }
   }
 

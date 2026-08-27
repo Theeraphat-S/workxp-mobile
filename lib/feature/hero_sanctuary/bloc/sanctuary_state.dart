@@ -22,6 +22,7 @@ class SanctuaryLoaded extends SanctuaryState {
     required this.hero,
     required this.heroModel,
     this.sfxEnabled = true,
+    this.bgmEnabled = true,
     this.hapticsEnabled = true,
     this.exportedBackupJson,
     this.backupStatusMessage,
@@ -30,6 +31,7 @@ class SanctuaryLoaded extends SanctuaryState {
   final Hero? hero;
   final HeroModel heroModel;
   final bool sfxEnabled;
+  final bool bgmEnabled;
   final bool hapticsEnabled;
   final String? exportedBackupJson;
   final String? backupStatusMessage;
@@ -41,6 +43,7 @@ class SanctuaryLoaded extends SanctuaryState {
     Hero? hero,
     HeroModel? heroModel,
     bool? sfxEnabled,
+    bool? bgmEnabled,
     bool? hapticsEnabled,
     String? exportedBackupJson,
     String? backupStatusMessage,
@@ -49,6 +52,7 @@ class SanctuaryLoaded extends SanctuaryState {
       hero: hero ?? this.hero,
       heroModel: heroModel ?? this.heroModel,
       sfxEnabled: sfxEnabled ?? this.sfxEnabled,
+      bgmEnabled: bgmEnabled ?? this.bgmEnabled,
       hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
       exportedBackupJson: exportedBackupJson,
       backupStatusMessage: backupStatusMessage,
@@ -60,6 +64,7 @@ class SanctuaryLoaded extends SanctuaryState {
     hero,
     heroModel,
     sfxEnabled,
+    bgmEnabled,
     hapticsEnabled,
     exportedBackupJson,
     backupStatusMessage,

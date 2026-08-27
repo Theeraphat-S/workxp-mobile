@@ -16,6 +16,7 @@ class SettingsSection extends StatefulWidget {
 }
 
 class _SettingsSectionState extends State<SettingsSection> {
+  bool _bgm = SensoryService.instance.isBgmEnabled;
   bool _sfx = SensoryService.instance.isSfxEnabled;
   bool _haptics = SensoryService.instance.isHapticsEnabled;
 
@@ -47,6 +48,32 @@ class _SettingsSectionState extends State<SettingsSection> {
               ),
             ),
             const SizedBox(height: 12),
+            // BGM Switch
+            SwitchListTile(
+              key: const Key('settings_bgm_switch'),
+              title: Text(
+                '16-BIT RETRO MUSIC (BGM)',
+                style: PixelTypography.pixelSubheader(
+                  fontSize: 10,
+                  color: PixelColors.textBright,
+                ),
+              ),
+              subtitle: Text(
+                'Contextual chiptune background themes across adventure realms',
+                style: PixelTypography.pixelBody(
+                  fontSize: 10,
+                  color: PixelColors.textMuted,
+                ),
+              ),
+              value: _bgm,
+              activeThumbColor: PixelColors.coinGold,
+              contentPadding: EdgeInsets.zero,
+              onChanged: (val) {
+                setState(() => _bgm = val);
+                context.read<SanctuaryBloc>().add(ToggleBgmEvent(val));
+              },
+            ),
+            const Divider(color: PixelColors.borderHighlight),
             // SFX Switch
             SwitchListTile(
               key: const Key('settings_sfx_switch'),
@@ -78,6 +105,7 @@ class _SettingsSectionState extends State<SettingsSection> {
               key: const Key('settings_haptics_switch'),
               title: Text(
                 'TACTILE HAPTIC FEEDBACK',
+
                 style: PixelTypography.pixelSubheader(
                   fontSize: 10,
                   color: PixelColors.textBright,
