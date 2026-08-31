@@ -1,5 +1,5 @@
 name: workxp
-description: "WorkXP (Pocket Quest) - 16-bit Retro Pixel RPG Productivity App"
+description: "WorkXP (Pocket Quest) - 16-bit retro pixel fantasy RPG gamified productivity mobile app built with Flutter, BLoC, and Drift SQLite."
 publish_to: 'none'
 version: 1.0.0+1
 
