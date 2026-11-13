@@ -7,11 +7,13 @@
 **16-bit pixel RPG that turns your tasks into boss fights.**<br/>
 แอปจัดการงานและสร้างนิสัยในรูปแบบเกม RPG พิกเซล 16-บิต
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.38%2B-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.11%2B-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![State Management](https://img.shields.io/badge/BLoC-flutter__bloc%209.1-9900FF?style=for-the-badge)](https://bloclibrary.dev)
-[![Persistence](https://img.shields.io/badge/Drift-SQLite%202.23-00A98F?style=for-the-badge)](https://drift.simonbinder.eu)
-[![Routing](https://img.shields.io/badge/AutoRoute-10.1-FF5722?style=for-the-badge)](https://autoroute.vercel.app)
+[![Database](https://img.shields.io/badge/Drift-SQLite%202.31-00A98F?style=for-the-badge)](https://drift.simonbinder.eu)
+[![Storage](https://img.shields.io/badge/Hive-2.2-FFC107?style=for-the-badge)](https://pub.dev/packages/hive)
+[![Routing](https://img.shields.io/badge/AutoRoute-10.3-FF5722?style=for-the-badge)](https://pub.dev/packages/auto_route)
+[![DI](https://img.shields.io/badge/GetIt-8.3-607D8B?style=for-the-badge)](https://pub.dev/packages/get_it)
 [![Audio](https://img.shields.io/badge/Audioplayers-6.7-E040FB?style=for-the-badge)](https://pub.dev/packages/audioplayers)
 
 [Overview](#overview) • [Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started)
@@ -73,7 +75,7 @@ graph LR
 
 ## <img src="docs/assets/readme/start.gif" width="32" align="absmiddle" alt="" /> Getting Started
 
-**Requires** Flutter `>= 3.29` · Dart `>= 3.7`
+**Requires** Flutter `>= 3.38.4` · Dart `>= 3.11.3`
 
 ```bash
 git clone https://github.com/Theeraphat-S/workxp-mobile.git && cd workxp-mobile
