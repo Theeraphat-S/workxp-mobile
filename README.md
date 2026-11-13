@@ -20,7 +20,7 @@
 
 ---
 
-## <img src="docs/assets/readme/book.gif" width="32" align="center" alt="" /> Overview
+## <img src="docs/assets/readme/book.gif" width="32" align="absmiddle" alt="" /> Overview
 
 Finish real tasks to damage **Bosses**, log **Habits** for MP buffs, clear **Dungeon** chapters, and spend **Coins** at **The Tavern**. Fully offline, 60fps, Thai/English, with 16-bit chiptune audio.
 
@@ -28,7 +28,7 @@ Finish real tasks to damage **Bosses**, log **Habits** for MP buffs, clear **Dun
 
 ---
 
-## <img src="docs/assets/readme/star.gif" width="32" align="center" alt="" /> Features
+## <img src="docs/assets/readme/star.gif" width="32" align="absmiddle" alt="" /> Features
 
 | | Feature | What it does |
 | :-: | :-- | :-- |
@@ -43,7 +43,7 @@ Finish real tasks to damage **Bosses**, log **Habits** for MP buffs, clear **Dun
 
 ---
 
-## <img src="docs/assets/readme/arch.gif" width="32" align="center" alt="" /> Architecture
+## <img src="docs/assets/readme/arch.gif" width="32" align="absmiddle" alt="" /> Architecture
 
 Feature-first vertical slices on the **FLDP Mobile Standard**.
 
@@ -71,7 +71,7 @@ graph LR
 
 ---
 
-## <img src="docs/assets/readme/start.gif" width="32" align="center" alt="" /> Getting Started
+## <img src="docs/assets/readme/start.gif" width="32" align="absmiddle" alt="" /> Getting Started
 
 **Requires** Flutter `>= 3.29` · Dart `>= 3.7`
 
@@ -96,7 +96,7 @@ flutter run
 
 <div align="center">
 
-<img src="docs/assets/readme/heart.gif" width="28" align="center" alt="" /> Built with the **FLDP Mobile Standard**, for productive heroes.
+<img src="docs/assets/readme/heart.gif" width="28" align="absmiddle" alt="" /> Built with the **FLDP Mobile Standard**, for productive heroes.
 
 <sub>Animated icons by <a href="https://lordicon.com/">Lordicon.com</a></sub>
 
