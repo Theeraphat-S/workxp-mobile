@@ -1,6 +1,6 @@
 # WorkXP — Agent Engineering Guide (`AGENTS.md`)
 
-This repository is **WorkXP (Pocket Quest)**, a 16-bit retro pixel fantasy RPG gamified productivity mobile application built with **Flutter (Dart)**, **Riverpod**, and **Hive**.
+This repository is **WorkXP (Pocket Quest)**, a 16-bit retro pixel fantasy RPG gamified productivity mobile application built with **Flutter (Dart)**, **flutter_bloc**, **GetIt**, **Drift (SQLite)**, **Hive**, and **AutoRoute**, following the FLDP Mobile Standard ([ADR 0004](docs/adr/0004-fldp-mobile-standard-architecture-migration.md)).
 
 ---
 
@@ -9,7 +9,8 @@ This repository is **WorkXP (Pocket Quest)**, a 16-bit retro pixel fantasy RPG g
 - **Domain Language First**: Use canonical domain terminology defined in [CONTEXT.md](file:///c:/Work/workxp/CONTEXT.md) (`Hero`, `Boss`, `Dungeon`, `Quest`, `Daily Quest`, `Habit`, `Ghost State`, `Revival Quest`, `Tavern`, `Custom Reward`, `EXP`, `Coin`). Avoid generic terms.
 - **Architectural Integrity**: Respect decisions recorded in [docs/adr/](file:///c:/Work/workxp/docs/adr/) and specifications in [docs/SPEC.md](file:///c:/Work/workxp/docs/SPEC.md).
 - **Ticket-Driven Flow**: Implement features slice-by-slice following tickets in [`.scratch/workxp/issues/`](file:///c:/Work/workxp/.scratch/workxp/issues/) in dependency order.
-- **Offline-First & Zero Latency**: All domain state must persist locally via Hive. State mutations must feel instantaneous (60fps).
+- **State & DI**: Use BLoCs/Cubits (`flutter_bloc` + `equatable`) wired through GetIt (`lib/locator.dart`). Riverpod code under `lib/presentation/providers/` is legacy — do not extend it.
+- **Offline-First & Zero Latency**: Persist domain data locally in Drift (SQLite); use Hive only for lightweight preferences and cache. State mutations must feel instantaneous (60fps).
 
 ---
 
@@ -29,7 +30,7 @@ Agents must consult the relevant skill (`SKILL.md`) **before** starting work in 
 
 | Phase & Workflow | When to Read / Trigger Condition | Skill Pointer |
 | :--- | :--- | :--- |
-| **1. Architecture & Setup** | Structuring folders, data/logic/UI layers, Riverpod providers | [`flutter-apply-architecture-best-practices`](file:///c:/Work/workxp/.agents/skills/flutter-apply-architecture-best-practices/SKILL.md) |
+| **1. Architecture & Setup** | Structuring folders, data/logic/UI layers, BLoCs & GetIt wiring | [`flutter-apply-architecture-best-practices`](file:///c:/Work/workxp/.agents/skills/flutter-apply-architecture-best-practices/SKILL.md) |
 | | Designing deep modules, minimal seams, clean interfaces | [`codebase-design`](file:///c:/Work/workxp/.agents/skills/codebase-design/SKILL.md) |
 | | Introducing new domain terms or recording architectural trade-offs | [`domain-modeling`](file:///c:/Work/workxp/.agents/skills/domain-modeling/SKILL.md) |
 | **2. UI/UX & 16-Bit Crafting** | Building screens, custom widgets, 60fps animations & transitions | [`flutter-ui-ux`](file:///c:/Work/workxp/.agents/skills/flutter-ui-ux/SKILL.md) |
